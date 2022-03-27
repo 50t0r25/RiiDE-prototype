@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //replaces fragment while adding to backstack
-    public fun replaceCurrentFragment(fragment: Fragment) =
+    fun replaceCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
             setCustomAnimations(
                 R.anim.explode_in,

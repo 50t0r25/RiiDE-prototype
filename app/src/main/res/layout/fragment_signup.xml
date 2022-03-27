@@ -46,7 +46,7 @@
                 app:layout_constraintVertical_bias="0.2">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/loginEmailTf"
+                    android:id="@+id/signupEmailTf"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,13 +54,13 @@
                     android:hint="Email">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/loginEmailEt"
+                        android:id="@+id/signupEmailEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/loginPasswordTf"
+                    android:id="@+id/signupPasswordTf"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                     android:hint="Password">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/loginPasswordEt"
+                        android:id="@+id/signupPasswordEt"
                         android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -77,7 +77,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/loginPasswordConfirmTf"
+                    android:id="@+id/signupPasswordConfirmTf"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                     android:hint="Confirm Password">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/loginPasswordConfirmEt"
+                        android:id="@+id/signupPasswordConfirmEt"
                         android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

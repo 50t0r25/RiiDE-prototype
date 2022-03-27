@@ -14,9 +14,9 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
     private lateinit var auth: FirebaseAuth
 
-    lateinit var emailEt : TextInputEditText
-    lateinit var passwordEt : TextInputEditText
-    lateinit var passwordConfirmEt : TextInputEditText
+    private lateinit var emailEt : TextInputEditText
+    private lateinit var passwordEt : TextInputEditText
+    private lateinit var passwordConfirmEt : TextInputEditText
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -25,9 +25,9 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
         val confirmButton = getView()?.findViewById<Button>(R.id.confirmSignupButton)
         val cancelButton = getView()?.findViewById<Button>(R.id.signupCancelButton)
-        emailEt = requireView().findViewById(R.id.loginEmailEt)
-        passwordEt = requireView().findViewById(R.id.loginPasswordEt)
-        passwordConfirmEt = requireView().findViewById(R.id.loginPasswordConfirmEt)
+        emailEt = requireView().findViewById(R.id.signupEmailEt)
+        passwordEt = requireView().findViewById(R.id.signupPasswordEt)
+        passwordConfirmEt = requireView().findViewById(R.id.signupPasswordConfirmEt)
 
         cancelButton?.setOnClickListener {
             parentFragmentManager.popBackStack()
@@ -38,7 +38,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
         }
     }
 
-    fun singupUser() {
+    private fun singupUser() {
         val email = emailEt.text.toString().trim()
         val password = passwordEt.text.toString().trim()
         val passwordConfirm = passwordConfirmEt.text.toString().trim()
@@ -51,7 +51,6 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI to logged in profile fragment
-                        val user = auth.currentUser
                         Toast.makeText(context,
                             "Account successfully created!",
                             Toast.LENGTH_SHORT).show()
