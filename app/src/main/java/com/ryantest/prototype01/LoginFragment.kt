@@ -51,6 +51,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             "Logged in successfully!",
                             Toast.LENGTH_SHORT).show()
 
+                        //set the activity's profile fragment variable as the logged in one then load it
                         (activity as MainActivity?)?.fragmentProfile = ProfileLoggedinFragment()
                         (activity as MainActivity?)?.setCurrentFragment(ProfileLoggedinFragment())
 

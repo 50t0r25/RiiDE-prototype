@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     lateinit var fragmentProfile : Fragment
-    var fragmentHome = HomeFragment()
+    private var fragmentHome = HomeFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,14 +22,15 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        val navBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        //change the profile fragment variable to the logged in one if the user is signed in
         val currentUser = auth.currentUser
         if(currentUser != null){
             fragmentProfile = ProfileLoggedinFragment()
         } else {
             fragmentProfile = ProfileFragment()
         }
-
-        val navBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         setCurrentFragment(fragmentHome) //defaults view to home fragment
 

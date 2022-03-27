@@ -55,6 +55,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                             "Account successfully created!",
                             Toast.LENGTH_SHORT).show()
 
+                        //set the activity's profile fragment variable as the logged in one then load it
                         (activity as MainActivity?)?.fragmentProfile = ProfileLoggedinFragment()
                         (activity as MainActivity?)?.setCurrentFragment(ProfileLoggedinFragment())
 
