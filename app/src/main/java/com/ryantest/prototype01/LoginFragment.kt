@@ -51,7 +51,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             "Logged in successfully!",
                             Toast.LENGTH_SHORT).show()
 
-                        //TODO Update UI
+                        (activity as MainActivity?)?.fragmentProfile = ProfileLoggedinFragment()
+                        (activity as MainActivity?)?.setCurrentFragment(ProfileLoggedinFragment())
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(context,

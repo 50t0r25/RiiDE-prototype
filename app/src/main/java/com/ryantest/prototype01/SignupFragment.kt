@@ -55,7 +55,9 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                             "Account successfully created!",
                             Toast.LENGTH_SHORT).show()
 
-                        //TODO Update UI
+                        (activity as MainActivity?)?.fragmentProfile = ProfileLoggedinFragment()
+                        (activity as MainActivity?)?.setCurrentFragment(ProfileLoggedinFragment())
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(

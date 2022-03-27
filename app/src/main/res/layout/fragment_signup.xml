@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="30dp">
+    android:padding="20dp">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"

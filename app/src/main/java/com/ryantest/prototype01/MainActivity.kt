@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
         val currentUser = auth.currentUser
         if(currentUser != null){
-            //TODO Add logged in profile fragment
+            fragmentProfile = ProfileLoggedinFragment()
         } else {
             fragmentProfile = ProfileFragment()
         }
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     //replaces fragment while CLEARING the backstack
-    private fun setCurrentFragment(fragment: Fragment) =
+    fun setCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
             setCustomAnimations(
                 R.anim.fade_in,
