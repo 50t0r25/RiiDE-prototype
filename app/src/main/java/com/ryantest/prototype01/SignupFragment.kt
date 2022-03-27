@@ -28,6 +28,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
         emailEt = requireView().findViewById(R.id.loginEmailEt)
         passwordEt = requireView().findViewById(R.id.loginPasswordEt)
         passwordConfirmEt = requireView().findViewById(R.id.loginPasswordConfirmEt)
+
         cancelButton?.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
@@ -39,27 +40,35 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
     fun singupUser() {
         val email = emailEt.text.toString().trim()
-        val password = passwordEt.text.toString()
-        val passwordConfirm = passwordConfirmEt.text.toString()
+        val password = passwordEt.text.toString().trim()
+        val passwordConfirm = passwordConfirmEt.text.toString().trim()
 
-        if (password.equals(passwordConfirm, false) && email.isNotBlank()) {
+        if (password.equals(passwordConfirm, false)
+            && email.isNotBlank()
+            && password.isNotBlank()) {
 
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
+                        // Sign in success, update UI to logged in profile fragment
                         val user = auth.currentUser
-                        Toast.makeText(context, "Authentication successful.",
+                        Toast.makeText(context,
+                            "Account successfully created!",
                             Toast.LENGTH_SHORT).show()
+
                         //TODO Update UI
                     } else {
                         // If sign in fails, display a message to the user.
-                        Toast.makeText(context, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Authentication failed.\n" + task.exception?.localizedMessage.toString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
         } else {
-            //TODO add error handling
+            Toast.makeText(context, "Please refill the fields correctly.",
+                Toast.LENGTH_SHORT).show()
         }
     }
 }
