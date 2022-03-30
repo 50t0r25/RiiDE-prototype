@@ -43,9 +43,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         if (email.isNotBlank() && password.isNotBlank()) {
 
+            (activity as MainActivity?)?.createLoadingDialog()
+
             auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
+
+                        (activity as MainActivity?)?.dismissLoadingDialog()
+
                         // Sign in success, update UI with the signed-in user's information
                         Toast.makeText(context,
                             "Logged in successfully!",
@@ -56,6 +61,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         (activity as MainActivity?)?.setCurrentFragment(ProfileLoggedinFragment())
 
                     } else {
+
+                        (activity as MainActivity?)?.dismissLoadingDialog()
+
                         // If sign in fails, display a message to the user.
                         Toast.makeText(context,
                             "Authentication failed.\n" + task.exception?.localizedMessage.toString(),

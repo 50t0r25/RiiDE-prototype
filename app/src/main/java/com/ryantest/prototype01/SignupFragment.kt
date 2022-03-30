@@ -14,9 +14,9 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var emailEt : TextInputEditText
-    private lateinit var passwordEt : TextInputEditText
-    private lateinit var passwordConfirmEt : TextInputEditText
+    private lateinit var emailEt: TextInputEditText
+    private lateinit var passwordEt: TextInputEditText
+    private lateinit var passwordConfirmEt: TextInputEditText
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,21 +45,32 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
         if (password.equals(passwordConfirm, false)
             && email.isNotBlank()
-            && password.isNotBlank()) {
+            && password.isNotBlank()
+        ) {
+
+            (activity as MainActivity?)?.createLoadingDialog()
 
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI to logged in profile fragment
-                        Toast.makeText(context,
-                            "Account successfully created!",
-                            Toast.LENGTH_SHORT).show()
 
-                        //set the activity's profile fragment variable as the logged in one then load it
+                        (activity as MainActivity?)?.dismissLoadingDialog()
+
+                        // Sign in success, update UI to logged in profile fragment
+                        Toast.makeText(
+                            context,
+                            "Account successfully created!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        // Set the activity's profile fragment variable as the logged in one then load it
                         (activity as MainActivity?)?.fragmentProfile = ProfileLoggedinFragment()
                         (activity as MainActivity?)?.setCurrentFragment(ProfileLoggedinFragment())
 
                     } else {
+
+                        (activity as MainActivity?)?.dismissLoadingDialog()
+
                         // If sign in fails, display a message to the user.
                         Toast.makeText(
                             context,
@@ -69,8 +80,10 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                     }
                 }
         } else {
-            Toast.makeText(context, "Please refill the fields correctly.",
-                Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context, "Please refill the fields correctly.",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

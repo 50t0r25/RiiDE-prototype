@@ -13,7 +13,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         val signupButton = getView()?.findViewById<Button>(R.id.signupButton)
         val loginButton = getView()?.findViewById<Button>(R.id.loginButton)
 
-        //these two basically call the method to switch fragment from MainActivity
+        // These two basically call the method to switch fragment from MainActivity
         signupButton?.setOnClickListener {
             (activity as MainActivity?)?.replaceCurrentFragment(SignupFragment())
         }
