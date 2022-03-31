@@ -81,7 +81,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                         .addOnSuccessListener {
                                             (activity as MainActivity).username = it.data!!["username"].toString()
 
-                                            // Refreshes the main activity to fetch user data, and set the new fragment
+                                            // Refreshes the activity to logged in state and sets the new fragment
                                             (activity as MainActivity).refreshMainActivity()
                                             (activity as MainActivity).setCurrentFragment(ProfileLoggedinFragment())
 

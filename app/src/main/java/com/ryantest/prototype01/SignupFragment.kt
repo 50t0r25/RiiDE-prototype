@@ -86,11 +86,11 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                                         Toast.LENGTH_SHORT
                                     ).show()
 
-                                    // Save user
+                                    // Save user data
                                     (activity as MainActivity).userEmail = email
                                     (activity as MainActivity).username = username
 
-                                    // Refreshes the main activity to fetch user data, and set the new fragment
+                                    // Refreshes the activity to logged in state and sets the new fragment
                                     (activity as MainActivity).refreshMainActivity()
                                     (activity as MainActivity).setCurrentFragment(ProfileLoggedinFragment())
 
