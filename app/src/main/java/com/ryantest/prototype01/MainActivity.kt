@@ -3,6 +3,7 @@ package com.ryantest.prototype01
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -10,11 +11,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
+    lateinit var username : String
+    lateinit var userEmail : String
+
     lateinit var fragmentProfile : Fragment
     private var fragmentHome = HomeFragment()
     private lateinit var loading: AlertDialog
@@ -25,16 +34,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         auth = Firebase.auth
+        db = Firebase.firestore
 
         val navBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        // Change the profile fragment variable to the logged in one if the user is signed in
-        val currentUser = auth.currentUser
-        if(currentUser != null){
-            fragmentProfile = ProfileLoggedinFragment()
-        } else {
-            fragmentProfile = ProfileFragment()
-        }
+        refreshMainActivity()
 
         setCurrentFragment(fragmentHome) // Defaults view to home fragment
 
@@ -94,5 +98,31 @@ class MainActivity : AppCompatActivity() {
 
     fun dismissLoadingDialog() {
         loading.dismiss()
+    }
+
+    fun refreshMainActivity() {
+        // Check if user is logged in
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            // User logged in, set the profile fragment to be the logged in one
+            fragmentProfile = ProfileLoggedinFragment()
+
+            // Set database source as cache for faster and offline access
+            // Then fetch the user data from the DB
+            val source = Source.CACHE
+            db.collection("users").document(currentUser.uid).get(source)
+                .addOnSuccessListener { user ->
+                    username = user.data!!["username"].toString()
+                    userEmail = user.data!!["email"].toString()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this,
+                        "Failed accessing the database." + it.localizedMessage,
+                        Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            // User isn't logged in, set profile fragment to the default one
+            fragmentProfile = ProfileFragment()
+        }
     }
 }

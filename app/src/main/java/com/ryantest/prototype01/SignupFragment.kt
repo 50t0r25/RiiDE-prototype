@@ -64,20 +64,18 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
             && checkStringSafety(username)
         ) {
 
-            (activity as MainActivity?)?.createLoadingDialog()
+            (activity as MainActivity).createLoadingDialog()
 
             db.collection("users").whereEqualTo("username",username).get()
-                .addOnSuccessListener {
+                .addOnSuccessListener { documents ->
                     // Check if the username is already taken
-                    for (i in it) { if (i != null) usernameTaken = true }
+                    for (document in documents) { if (document != null) usernameTaken = true }
                     if (!usernameTaken) {
                         // Authenticate the user
                         auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(requireActivity()) { task ->
                                 if (task.isSuccessful) {
                                     // Sign in success
-
-                                    (activity as MainActivity?)?.dismissLoadingDialog()
 
                                     // Add user to the database
                                     db.collection("users").document(auth.currentUser!!.uid).set(user)
@@ -88,13 +86,18 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                                         Toast.LENGTH_SHORT
                                     ).show()
 
-                                    // Set the activity's profile fragment variable as the logged in one then load it
-                                    (activity as MainActivity?)?.fragmentProfile = ProfileLoggedinFragment()
-                                    (activity as MainActivity?)?.setCurrentFragment(ProfileLoggedinFragment())
+                                    // Save user
+                                    (activity as MainActivity).userEmail = email
+                                    (activity as MainActivity).username = username
 
+                                    // Refreshes the main activity to fetch user data, and set the new fragment
+                                    (activity as MainActivity).refreshMainActivity()
+                                    (activity as MainActivity).setCurrentFragment(ProfileLoggedinFragment())
+
+                                    (activity as MainActivity).dismissLoadingDialog()
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    (activity as MainActivity?)?.dismissLoadingDialog()
+                                    (activity as MainActivity).dismissLoadingDialog()
                                     Toast.makeText(
                                         context,
                                         "Authentication failed.\n" + task.exception?.localizedMessage.toString(),
@@ -105,7 +108,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
                     } else {
                         // If the username is already taken, cancel
-                        (activity as MainActivity?)?.dismissLoadingDialog()
+                        (activity as MainActivity).dismissLoadingDialog()
                         Toast.makeText(
                             context,
                             "Username already taken.",
@@ -116,10 +119,10 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                 }
                 .addOnFailureListener {
                     // Error while checking if the username already exists
-                    (activity as MainActivity?)?.dismissLoadingDialog()
+                    (activity as MainActivity).dismissLoadingDialog()
                     Toast.makeText(
                         context,
-                        "Error while accessing the database.",
+                        "Failed to access the database.\n" + it.localizedMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }

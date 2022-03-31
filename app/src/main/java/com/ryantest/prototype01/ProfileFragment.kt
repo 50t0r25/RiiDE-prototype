@@ -15,10 +15,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
         // These two basically call the method to switch fragment from MainActivity
         signupButton?.setOnClickListener {
-            (activity as MainActivity?)?.replaceCurrentFragment(SignupFragment())
+            (activity as MainActivity).replaceCurrentFragment(SignupFragment())
         }
         loginButton?.setOnClickListener {
-            (activity as MainActivity?)?.replaceCurrentFragment(LoginFragment())
+            (activity as MainActivity).replaceCurrentFragment(LoginFragment())
         }
     }
 }
