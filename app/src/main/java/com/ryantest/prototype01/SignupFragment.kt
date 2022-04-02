@@ -82,7 +82,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
                                     Toast.makeText(
                                         context,
-                                        "Account successfully created!",
+                                        "Account successfully created",
                                         Toast.LENGTH_SHORT
                                     ).show()
 
@@ -100,7 +100,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                                     (activity as MainActivity).dismissLoadingDialog()
                                     Toast.makeText(
                                         context,
-                                        "Authentication failed.\n" + task.exception?.localizedMessage.toString(),
+                                        "Authentication failed\n" + task.exception?.localizedMessage.toString(),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -111,7 +111,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                         (activity as MainActivity).dismissLoadingDialog()
                         Toast.makeText(
                             context,
-                            "Username already taken.",
+                            "Username already taken",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -122,7 +122,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                     (activity as MainActivity).dismissLoadingDialog()
                     Toast.makeText(
                         context,
-                        "Failed to access the database.\n" + it.localizedMessage,
+                        "Failed to access the database\n" + it.localizedMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -136,7 +136,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
             } else {
                 // Input not filled in correctly
                 Toast.makeText(
-                    context, "Please refill the fields correctly.",
+                    context, "Please refill the fields correctly",
                     Toast.LENGTH_SHORT
                 ).show()
             }

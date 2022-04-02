@@ -70,7 +70,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                                 // Sign in success, update UI with the signed-in user's information
                                 Toast.makeText(context,
-                                    "Logged in successfully!",
+                                    "Logged in successfully",
                                     Toast.LENGTH_SHORT).show()
 
                                 (activity as MainActivity).userEmail = emailToSave
@@ -90,7 +90,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                         .addOnFailureListener {
                                             (activity as MainActivity).dismissLoadingDialog()
                                             Toast.makeText(context,
-                                                "Failed to access the database.\n" + it.localizedMessage,
+                                                "Failed to access the database\n" + it.localizedMessage,
                                                 Toast.LENGTH_SHORT).show()
                                         }
                                 } else {
@@ -110,7 +110,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(context,
-                                    "Authentication failed.\n" + task.exception?.localizedMessage.toString(),
+                                    "Authentication failed\n" + task.exception?.localizedMessage.toString(),
                                     Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -121,10 +121,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     (activity as MainActivity).dismissLoadingDialog()
                     Toast.makeText(
                         context,
-                        "Failed to access the database.\n" + it.localizedMessage,
+                        "Failed to access the database\n" + it.localizedMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+        } else {
+            Toast.makeText(
+                context, "Please refill the fields correctly",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

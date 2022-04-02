@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener {
                     Toast.makeText(this,
-                        "Failed accessing the database." + it.localizedMessage,
+                        "Failed accessing the database" + it.localizedMessage,
                         Toast.LENGTH_SHORT).show()
                 }
         } else {
