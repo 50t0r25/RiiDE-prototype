@@ -35,6 +35,7 @@
                     android:layout_marginBottom="10dp">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/departureEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -47,6 +48,7 @@
                     android:layout_marginBottom="10dp">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/destinationEt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -56,6 +58,7 @@
                     android:layout_height="wrap_content">
 
                     <Button
+                        android:id="@+id/searchCreateButton"
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -67,6 +70,7 @@
                         android:background="@drawable/squareish_button_background"/>
 
                     <ToggleButton
+                        android:id="@+id/driverPassengerToggle"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/cairo_bold"

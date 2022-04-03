@@ -34,10 +34,10 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
         userNameTv.text = (activity as MainActivity).username
 
         logoutButton.setOnClickListener {
-            // Logout the user then set the activity's profile fragment variable as the non-logged in one
-            // then load that new fragment
+            // Logout the user, refresh the main activity
+            // then load the new non-loggedIn fragment
             FirebaseAuth.getInstance().signOut()
-            (activity as MainActivity).fragmentProfile = ProfileFragment()
+            (activity as MainActivity).refreshMainActivity()
             (activity as MainActivity).setCurrentFragment(ProfileFragment())
         }
     }

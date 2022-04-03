@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
     lateinit var username : String
     lateinit var userEmail : String
 
+    lateinit var departure : String
+    lateinit var destination : String
+
+    var isLoggedIn = false
+
     lateinit var fragmentProfile : Fragment
     private var fragmentHome = HomeFragment()
     private lateinit var loading: AlertDialog
@@ -106,6 +111,7 @@ class MainActivity : AppCompatActivity() {
         if(currentUser != null){
             // User logged in, set the profile fragment to be the logged in one
             fragmentProfile = ProfileLoggedinFragment()
+            isLoggedIn = true
 
             // Set database source as cache for faster and offline access
             // Then fetch the user data from the DB
@@ -123,6 +129,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             // User isn't logged in, set profile fragment to the default one
             fragmentProfile = ProfileFragment()
+            isLoggedIn = false
         }
     }
 }
