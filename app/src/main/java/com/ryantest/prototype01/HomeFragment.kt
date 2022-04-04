@@ -25,6 +25,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         departure = requireView().findViewById(R.id.departureEt)
         destination = requireView().findViewById(R.id.destinationEt)
 
+        // Checks for the passenger/driver toggle state
         passengerDriverToggle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 searchCreateButton.text = "Create"
@@ -36,10 +37,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         searchCreateButton.setOnClickListener {
+            // Checks if the user is logged in first
             if ((activity as MainActivity).isLoggedIn) {
                 if (isPassenger) {
                     // TODO: Search for a trip
                 } else {
+                    // Get the departure and destination, put them in the activity's global variables
+                    // Then start the fragment to create trips
                     (activity as MainActivity).departure = departure.text.toString().trim()
                     (activity as MainActivity).destination = destination.text.toString().trim()
 
@@ -49,6 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                         (activity as MainActivity).replaceCurrentFragment(CreateTripFragment())
                     } else {
+                        // Empty field
                         Toast.makeText(
                             context, "Please refill the fields correctly",
                             Toast.LENGTH_SHORT
@@ -56,6 +61,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
                 }
             } else {
+                // User not logged in
                 Toast.makeText(
                     context, "Please Login or create an account first",
                     Toast.LENGTH_SHORT
