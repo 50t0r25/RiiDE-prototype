@@ -78,7 +78,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
     // Function runs when positive button in DatePicker dialog is clicked
     override fun onDateSet(p0: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         savedDay = dayOfMonth
-        savedMonth = month
+        savedMonth = month+1
         savedYear = year
 
         // Show the TimePicker after choosing the date

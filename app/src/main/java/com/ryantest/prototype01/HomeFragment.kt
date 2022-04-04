@@ -47,7 +47,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     (activity as MainActivity).departure = departure.text.toString().trim()
                     (activity as MainActivity).destination = destination.text.toString().trim()
 
-                    if (!((activity as MainActivity).departure.equals("") || (activity as MainActivity).destination.equals(""))) {
+                    if (!((activity as MainActivity).departure == "" || (activity as MainActivity).destination == "")) {
                         departure.setText("")
                         destination.setText("")
 
