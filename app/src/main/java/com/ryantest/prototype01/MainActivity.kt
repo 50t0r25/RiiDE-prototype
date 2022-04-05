@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var username : String
     lateinit var userEmail : String
+    var isInTrip = false
 
     lateinit var departure : String
     lateinit var destination : String
@@ -120,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                 .addOnSuccessListener { user ->
                     username = user.data!!["username"].toString()
                     userEmail = user.data!!["email"].toString()
+                    isInTrip = user.data!!["isInTrip"].toString().toBoolean()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this,

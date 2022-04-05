@@ -10,6 +10,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -97,63 +98,83 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
         }
 
         confirmButton.setOnClickListener {
-            // Check if price input field isn't empty
-            if (priceInputEt.text.toString() != "") {
-                // Makes the Trip data to save to the database
-                // Separated into several hashMaps because context
-                val price = priceInputEt.text.toString().toInt()
-                val maxPassengers = passengerNumTv.text.toString().toInt()
-                val tripDate = hashMapOf(
-                    "year" to savedYear,
-                    "month" to savedMonth,
-                    "day" to savedDay,
-                    "hour" to savedHour,
-                    "minute" to savedMinute,
-                )
+            // Check if the user is already in a trip
+            // User cannot be in several trips at the same time
+            if (!(activity as MainActivity).isInTrip) {
+                // Check if price input field isn't empty
+                if (priceInputEt.text.toString() != "") {
+                    // Makes the Trip data to save to the database
+                    // Separated into several hashMaps because context
+                    val price = priceInputEt.text.toString().toInt()
+                    val maxPassengers = passengerNumTv.text.toString().toInt()
+                    val tripDate = hashMapOf(
+                        "year" to savedYear,
+                        "month" to savedMonth,
+                        "day" to savedDay,
+                        "hour" to savedHour,
+                        "minute" to savedMinute,
+                    )
 
-                val driver = hashMapOf(
-                    "userID" to auth.currentUser!!.uid,
-                    "username" to (activity as MainActivity).username,
-                )
+                    val driver = hashMapOf(
+                        "userID" to auth.currentUser!!.uid,
+                        "username" to (activity as MainActivity).username,
+                    )
 
-                val trip = hashMapOf(
-                    "driver" to driver,
-                    "departure" to (activity as MainActivity).departure,
-                    "destination" to (activity as MainActivity).destination,
-                    "date" to tripDate,
-                    "price" to price,
-                    "maxPassengers" to maxPassengers,
-                    "seatsLeft" to maxPassengers,
-                )
+                    val trip = hashMapOf(
+                        "driver" to driver,
+                        "departure" to (activity as MainActivity).departure,
+                        "destination" to (activity as MainActivity).destination,
+                        "date" to tripDate,
+                        "price" to price,
+                        "maxPassengers" to maxPassengers,
+                        "seatsLeft" to maxPassengers,
+                    )
 
-                (activity as MainActivity).createLoadingDialog()
+                    (activity as MainActivity).createLoadingDialog()
 
-                // Add trip hashMap to the database as a document with a random ID
-                db.collection("trips").add(trip)
-                    .addOnSuccessListener {
-                        (activity as MainActivity).dismissLoadingDialog()
-                        parentFragmentManager.popBackStack()
+                    // Add trip hashMap to the database as a document with a random ID
+                    // Set isInTrip user field to true
+                    // Add the new trip's ID as "currentTripID" in user document
+                    db.collection("trips").add(trip)
+                        .addOnSuccessListener { newTrip ->
+                            val userDocument = db.collection("users").document(auth.currentUser!!.uid)
+                            userDocument.update("isInTrip", true)
+                                .addOnSuccessListener {
+                                    userDocument.set(hashMapOf("currentTripID" to newTrip.id), SetOptions.merge())
+                                        .addOnSuccessListener {
+                                            (activity as MainActivity).dismissLoadingDialog()
+                                            parentFragmentManager.popBackStack()
 
-                        Toast.makeText(
-                            context,
-                            "Trip created successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    .addOnFailureListener {
-                        (activity as MainActivity).dismissLoadingDialog()
+                                            Toast.makeText(
+                                                context,
+                                                "Trip created successfully",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
+                        }
+                        .addOnFailureListener {
+                            (activity as MainActivity).dismissLoadingDialog()
 
-                        Toast.makeText(
-                            context,
-                            "Failed to access the database\n" + it.localizedMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                            Toast.makeText(
+                                context,
+                                "Failed to access the database\n" + it.localizedMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
 
+                } else {
+                    // Price input field empty
+                    Toast.makeText(context,
+                        "Please give a price per passenger",
+                        Toast.LENGTH_SHORT).show()
+                }
             } else {
-                // Price input field empty
+                // User is already in a trip
+                parentFragmentManager.popBackStack()
+
                 Toast.makeText(context,
-                    "Please give a price per passenger",
+                    "You cannot be in several trips at the same time",
                     Toast.LENGTH_SHORT).show()
             }
         }

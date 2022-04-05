@@ -55,6 +55,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
         val user = hashMapOf(
             "username" to username,
             "email" to email,
+            "isInTrip" to false,
         )
 
 
@@ -89,6 +90,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                                     // Save user data
                                     (activity as MainActivity).userEmail = email
                                     (activity as MainActivity).username = username
+                                    (activity as MainActivity).isInTrip = false
 
                                     // Refreshes the activity to logged in state and sets the new fragment
                                     (activity as MainActivity).refreshMainActivity()
