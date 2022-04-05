@@ -44,8 +44,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 } else {
                     // Get the departure and destination, put them in the activity's global variables
                     // Then start the fragment to create trips
-                    (activity as MainActivity).departure = departure.text.toString().trim()
-                    (activity as MainActivity).destination = destination.text.toString().trim()
+                    (activity as MainActivity).departure = departure.text.toString().trim().lowercase()
+                    (activity as MainActivity).destination = destination.text.toString().trim().lowercase()
 
                     if (!((activity as MainActivity).departure == "" || (activity as MainActivity).destination == "")) {
                         departure.setText("")

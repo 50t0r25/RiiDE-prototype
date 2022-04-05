@@ -6,6 +6,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -24,12 +30,19 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
     private var savedHour = 0
     private var savedMinute = 0
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+
     private lateinit var departureTv : TextView
     private lateinit var destinationTv : TextView
     private lateinit var dateTimeTv : TextView
+    private lateinit var passengerNumTv : TextView
     private lateinit var cancelButton : Button
     private lateinit var chooseTimeButton : Button
     private lateinit var confirmButton : Button
+    private lateinit var passengerNumMinusButton : Button
+    private lateinit var passengerNumPlusButton : Button
+    private lateinit var priceInputEt : TextInputEditText
 
     private lateinit var departure : String
     private lateinit var destination : String
@@ -43,6 +56,13 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
         cancelButton = requireView().findViewById(R.id.cTripCancelButton)
         chooseTimeButton = requireView().findViewById(R.id.chooseTimeButton)
         confirmButton = requireView().findViewById(R.id.cTripConfirmButton)
+        priceInputEt = requireView().findViewById(R.id.priceInputEf)
+        passengerNumMinusButton = requireView().findViewById(R.id.passengerNumMinusButton)
+        passengerNumPlusButton = requireView().findViewById(R.id.passengerNumPlusButton)
+        passengerNumTv = requireView().findViewById(R.id.passengerNumTv)
+
+        auth = Firebase.auth
+        db = Firebase.firestore
 
         departure = (activity as MainActivity).departure
         destination = (activity as MainActivity).destination
@@ -50,7 +70,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
         departureTv.text = departure
         destinationTv.text = destination
 
-        // Get the current date and time
+
         getDateTimeCalendar()
         // Init the Tv with the current time
         displayTimeInTv(hour,minute,day,month,year)
@@ -60,12 +80,91 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
             DatePickerDialog(requireContext(),this,year,month,day).show()
         }
 
+        passengerNumMinusButton.setOnClickListener {
+            // Decrement number of passengers
+            val number = passengerNumTv.text.toString().toInt()
+            if (number > 1) {
+                passengerNumTv.text = (number - 1).toString()
+            }
+        }
+
+        passengerNumPlusButton.setOnClickListener {
+            // Increment number of passengers
+            val number = passengerNumTv.text.toString().toInt()
+            if (number < 9) {
+                passengerNumTv.text = (number + 1).toString()
+            }
+        }
+
+        confirmButton.setOnClickListener {
+            // Check if price input field isn't empty
+            if (priceInputEt.text.toString() != "") {
+                // Makes the Trip data to save to the database
+                // Separated into several hashMaps because context
+                val price = priceInputEt.text.toString().toInt()
+                val maxPassengers = passengerNumTv.text.toString().toInt()
+                val tripDate = hashMapOf(
+                    "year" to savedYear,
+                    "month" to savedMonth,
+                    "day" to savedDay,
+                    "hour" to savedHour,
+                    "minute" to savedMinute,
+                )
+
+                val driver = hashMapOf(
+                    "userID" to auth.currentUser!!.uid,
+                    "username" to (activity as MainActivity).username,
+                )
+
+                val trip = hashMapOf(
+                    "driver" to driver,
+                    "departure" to (activity as MainActivity).departure,
+                    "destination" to (activity as MainActivity).destination,
+                    "date" to tripDate,
+                    "price" to price,
+                    "maxPassengers" to maxPassengers,
+                    "seatsLeft" to maxPassengers,
+                )
+
+                (activity as MainActivity).createLoadingDialog()
+
+                // Add trip hashMap to the database as a document with a random ID
+                db.collection("trips").add(trip)
+                    .addOnSuccessListener {
+                        (activity as MainActivity).dismissLoadingDialog()
+                        parentFragmentManager.popBackStack()
+
+                        Toast.makeText(
+                            context,
+                            "Trip created successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnFailureListener {
+                        (activity as MainActivity).dismissLoadingDialog()
+
+                        Toast.makeText(
+                            context,
+                            "Failed to access the database\n" + it.localizedMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+            } else {
+                // Price input field empty
+                Toast.makeText(context,
+                    "Please give a price per passenger",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+
         cancelButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
     }
 
+    // Get the current date and time
     private fun getDateTimeCalendar() {
         val cal = Calendar.getInstance()
         day = cal.get(Calendar.DAY_OF_MONTH)
@@ -78,6 +177,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
     // Function runs when positive button in DatePicker dialog is clicked
     override fun onDateSet(p0: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         savedDay = dayOfMonth
+        // For some damn reason, month starts from index 0, so i'm adding 1
         savedMonth = month+1
         savedYear = year
 
@@ -92,7 +192,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
 
         // Checks if the date isn't in the past
         // Doesn't check the hours/minutes cuz i'm lazy
-        if ((savedYear < year) || (savedDay < day && savedMonth == month && savedYear == year) || (savedMonth < month && savedYear == year)) {
+        if ((savedYear < year) || (savedDay < day && savedMonth == month+1 && savedYear == year) || (savedMonth < month+1 && savedYear == year)) {
             Toast.makeText(context,
                 "Time travel is still not a thing",
                 Toast.LENGTH_SHORT).show()
