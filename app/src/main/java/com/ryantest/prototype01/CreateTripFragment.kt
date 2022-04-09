@@ -143,6 +143,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                                     userDocument.set(hashMapOf("currentTripID" to newTrip.id), SetOptions.merge())
                                         .addOnSuccessListener {
                                             (activity as MainActivity).dismissLoadingDialog()
+                                            (activity as MainActivity).isInTrip = true
                                             parentFragmentManager.popBackStack()
 
                                             Toast.makeText(

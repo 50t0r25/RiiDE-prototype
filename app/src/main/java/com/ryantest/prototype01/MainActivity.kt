@@ -116,8 +116,7 @@ class MainActivity : AppCompatActivity() {
 
             // Set database source as cache for faster and offline access
             // Then fetch the user data from the DB
-            val source = Source.CACHE
-            db.collection("users").document(currentUser.uid).get(source)
+            db.collection("users").document(currentUser.uid).get(Source.CACHE)
                 .addOnSuccessListener { user ->
                     username = user.data!!["username"].toString()
                     userEmail = user.data!!["email"].toString()
