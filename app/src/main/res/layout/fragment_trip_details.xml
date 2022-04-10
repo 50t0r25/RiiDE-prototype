@@ -30,14 +30,14 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="Trip details:"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/textView13"
+                app:layout_constraintBottom_toTopOf="@+id/timeDetailsTv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/timeDetailsTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_medium"
@@ -57,13 +57,13 @@
                 android:textColor="@color/text_color01"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/toTv"
-                app:layout_constraintEnd_toStartOf="@+id/departureTv"
+                app:layout_constraintEnd_toStartOf="@+id/departureDetailsTv"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+                app:layout_constraintTop_toBottomOf="@+id/timeDetailsTv" />
 
             <TextView
-                android:id="@+id/departureTv"
+                android:id="@+id/departureDetailsTv"
                 android:layout_width="0dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
@@ -86,13 +86,13 @@
                 android:textColor="@color/text_color01"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView3"
-                app:layout_constraintEnd_toStartOf="@+id/destinationTv"
+                app:layout_constraintEnd_toStartOf="@+id/destinationDetailsTv"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fromTv" />
 
             <TextView
-                android:id="@+id/destinationTv"
+                android:id="@+id/destinationDetailsTv"
                 android:layout_width="0dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
@@ -116,13 +116,13 @@
                 android:textColor="@color/text_color01"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView8"
-                app:layout_constraintEnd_toStartOf="@+id/textView7"
+                app:layout_constraintEnd_toStartOf="@+id/driverUsernameDetailsTv"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toTv" />
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/driverUsernameDetailsTv"
                 android:layout_width="0dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
@@ -145,13 +145,13 @@
                 android:textColor="@color/text_color01"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView10"
-                app:layout_constraintEnd_toStartOf="@+id/textView9"
+                app:layout_constraintEnd_toStartOf="@+id/seatsLeftTv"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/seatsLeftTv"
                 android:layout_width="0dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
@@ -174,13 +174,13 @@
                 android:textColor="@color/text_color01"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView12"
-                app:layout_constraintEnd_toStartOf="@+id/textView11"
+                app:layout_constraintEnd_toStartOf="@+id/priceDetailsTv"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
             <TextView
-                android:id="@+id/textView11"
+                android:id="@+id/priceDetailsTv"
                 android:layout_width="0dp"
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
@@ -217,7 +217,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView12">
 
                 <Button
-                    android:id="@+id/cTripCancelButton"
+                    android:id="@+id/backDetailsButton"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -229,7 +229,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/cTripConfirmButton"
+                    android:id="@+id/deleteDetailsTv"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -3,6 +3,7 @@ package com.ryantest.prototype01
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     var isLoggedIn = false
 
-    lateinit var fragmentProfile : Fragment
+    private lateinit var fragmentProfile : Fragment
     private var fragmentHome = HomeFragment()
     private lateinit var loading: AlertDialog
     private lateinit var loadingBuilder : MaterialAlertDialogBuilder
@@ -132,5 +133,19 @@ class MainActivity : AppCompatActivity() {
             fragmentProfile = ProfileFragment()
             isLoggedIn = false
         }
+    }
+
+    // Turns an Integer into a 2 digit String (for correct time display)
+    private fun intDoubleDigit(int : Int) : String {
+        var newInt = int.toString()
+        if (newInt.length == 1) {
+            newInt = "0$newInt"
+        }
+        return newInt
+    }
+
+    // Displays time and date in a TextView
+    fun displayTimeInTv(tv : TextView, fHour : Int, fMinute : Int, fDay : Int, fMonth : Int, fYear : Int) {
+        tv.text = "Time: ${intDoubleDigit(fHour)}:${intDoubleDigit(fMinute)}\nDate: ${intDoubleDigit(fDay)}/${intDoubleDigit(fMonth)}/$fYear"
     }
 }

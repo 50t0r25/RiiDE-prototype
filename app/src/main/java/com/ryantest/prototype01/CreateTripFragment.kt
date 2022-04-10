@@ -74,7 +74,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
 
         getDateTimeCalendar()
         // Init the Tv with the current time
-        displayTimeInTv(hour,minute,day,month,year)
+        (activity as MainActivity).displayTimeInTv(dateTimeTv,hour,minute,day,month,year)
 
         chooseTimeButton.setOnClickListener {
             // Show the DatePicker, which will then show the TimePicker
@@ -219,23 +219,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                 "Time travel is still not a thing",
                 Toast.LENGTH_SHORT).show()
         } else {
-            displayTimeInTv(savedHour,savedMinute,savedDay,savedMonth,savedYear)
+            (activity as MainActivity).displayTimeInTv(dateTimeTv,savedHour,savedMinute,savedDay,savedMonth,savedYear)
         }
-    }
-
-    // Turns an Integer into a 2 digit String (for correct time display)
-    // yes i know it's ugly
-    fun intDoubleDigit(int : Int) : String {
-        var newInt = int.toString()
-        if (newInt.length == 1) {
-            newInt = "0$newInt"
-        }
-        return newInt
-    }
-
-    // Displays time and date in the TextView
-    // AGAIN I KNOW IT4SZ UGLY DONT @ ME
-    fun displayTimeInTv(fHour : Int, fMinute : Int, fDay : Int, fMonth : Int, fYear : Int) {
-        dateTimeTv.text = "Time: ${intDoubleDigit(fHour)}:${intDoubleDigit(fMinute)}\nDate: ${intDoubleDigit(fDay)}/${intDoubleDigit(fMonth)}/$fYear"
     }
 }
