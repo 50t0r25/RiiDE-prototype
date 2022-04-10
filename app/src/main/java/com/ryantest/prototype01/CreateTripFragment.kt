@@ -190,10 +190,15 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
     private fun getDateTimeCalendar() {
         val cal = Calendar.getInstance()
         day = cal.get(Calendar.DAY_OF_MONTH)
+        savedDay = day
         month = cal.get(Calendar.MONTH)
+        savedMonth = month
         year = cal.get(Calendar.YEAR)
+        savedYear = year
         hour = cal.get(Calendar.HOUR)
+        savedHour = hour
         minute = cal.get(Calendar.MINUTE)
+        savedMinute = minute
     }
 
     // Function runs when positive button in DatePicker dialog is clicked
@@ -208,13 +213,12 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
     }
 
     // Function runs when positive button in TimePicker dialog is clicked
-    override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, minute: Int) {
+    override fun onTimeSet(p0: TimePicker?, hourOfDay: Int, tMinute: Int) {
         savedHour = hourOfDay
-        savedMinute = minute
+        savedMinute = tMinute
 
         // Checks if the date isn't in the past
-        // Doesn't check the hours/minutes cuz i'm lazy
-        if ((savedYear < year) || (savedDay < day && savedMonth == month+1 && savedYear == year) || (savedMonth < month+1 && savedYear == year)) {
+        if ((savedYear < year) || (savedDay < day && savedMonth == month+1 && savedYear == year) || (savedMonth < month+1 && savedYear == year) || (savedHour < hour && savedDay == day && savedMonth == month+1 && savedYear == year) || (savedMinute < minute && savedHour == hour && savedDay == day && savedMonth == month+1 && savedYear == year)) {
             Toast.makeText(context,
                 "Time travel is still not a thing",
                 Toast.LENGTH_SHORT).show()
