@@ -102,7 +102,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                                     (activity as MainActivity).dismissLoadingDialog()
                                     Toast.makeText(
                                         context,
-                                        "Authentication failed\n" + task.exception?.localizedMessage.toString(),
+                                        task.exception?.localizedMessage.toString(),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -124,7 +124,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                     (activity as MainActivity).dismissLoadingDialog()
                     Toast.makeText(
                         context,
-                        "Failed to access the database\n" + it.localizedMessage,
+                        it.localizedMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }

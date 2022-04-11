@@ -71,7 +71,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
             }
             .addOnFailureListener {
                 Toast.makeText(context,
-                    "Failed accessing the database" + it.localizedMessage,
+                    it.localizedMessage,
                     Toast.LENGTH_SHORT).show()
             }
 

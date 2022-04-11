@@ -90,7 +90,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                         .addOnFailureListener {
                                             (activity as MainActivity).dismissLoadingDialog()
                                             Toast.makeText(context,
-                                                "Failed to access the database\n" + it.localizedMessage,
+                                                it.localizedMessage,
                                                 Toast.LENGTH_SHORT).show()
                                         }
                                 } else {
@@ -110,7 +110,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(context,
-                                    "Authentication failed\n" + task.exception?.localizedMessage.toString(),
+                                    task.exception?.localizedMessage.toString(),
                                     Toast.LENGTH_SHORT).show()
                             }
                         }
@@ -121,7 +121,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     (activity as MainActivity).dismissLoadingDialog()
                     Toast.makeText(
                         context,
-                        "Failed to access the database\n" + it.localizedMessage,
+                        it.localizedMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }

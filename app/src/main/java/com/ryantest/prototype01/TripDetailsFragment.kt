@@ -98,33 +98,43 @@ class TripDetailsFragment : Fragment(R.layout.fragment_trip_details) {
                                 }
                                 .setPositiveButton("Delete") { dialog, _ ->
                                     // User clicks delete
-                                    (activity as MainActivity).createLoadingDialog()
-                                    // TODO: Kick passengers out of trip
-                                    // Flag user as no longer in a trip
-                                    db.collection("users").document(auth.currentUser!!.uid).update("isInTrip", false)
-                                        .addOnSuccessListener {
-                                            // Delete this trip's document from the DB
-                                            db.collection("trips").document(tripID).delete()
-                                                .addOnSuccessListener {
-                                                    (activity as MainActivity).dismissLoadingDialog()
-                                                    Toast.makeText(context,
-                                                        "Trip deleted successfully",
-                                                        Toast.LENGTH_SHORT).show()
-                                                    (activity as MainActivity).isInTrip = false
-                                                    parentFragmentManager.popBackStack()
 
-                                                    dialog.dismiss()
-                                                }
-                                        }
-                                        .addOnFailureListener {
-                                            // Failed setting user as no longer in trip
-                                            (activity as MainActivity).dismissLoadingDialog()
-                                            Toast.makeText(
-                                                context,
-                                                "Failed to access the database\n" + it.localizedMessage,
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
+                                    if ((activity as MainActivity).isOnline()) {
+                                        // User has network access
+
+                                        (activity as MainActivity).createLoadingDialog()
+                                        // TODO: Kick passengers out of trip
+                                        // Flag user as no longer in a trip
+                                        db.collection("users").document(auth.currentUser!!.uid).update("isInTrip", false)
+                                            .addOnSuccessListener {
+                                                // Delete this trip's document from the DB
+                                                db.collection("trips").document(tripID).delete()
+                                                    .addOnSuccessListener {
+                                                        (activity as MainActivity).dismissLoadingDialog()
+                                                        Toast.makeText(context,
+                                                            "Trip deleted successfully",
+                                                            Toast.LENGTH_SHORT).show()
+                                                        (activity as MainActivity).isInTrip = false
+                                                        parentFragmentManager.popBackStack()
+
+                                                        dialog.dismiss()
+                                                    }
+                                            }
+                                            .addOnFailureListener {
+                                                // Failed setting user as no longer in trip
+                                                (activity as MainActivity).dismissLoadingDialog()
+                                                Toast.makeText(
+                                                    context,
+                                                    it.localizedMessage,
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    } else {
+                                        // No network access
+                                        Toast.makeText(context,
+                                            "Cannot connect to the internet, please check your network",
+                                            Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                                 .show()
                         }
@@ -136,7 +146,7 @@ class TripDetailsFragment : Fragment(R.layout.fragment_trip_details) {
                         (activity as MainActivity).dismissLoadingDialog()
                         Toast.makeText(
                             context,
-                            "Failed to access the database\n" + it.localizedMessage,
+                            it.localizedMessage,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -146,7 +156,7 @@ class TripDetailsFragment : Fragment(R.layout.fragment_trip_details) {
                 (activity as MainActivity).dismissLoadingDialog()
                 Toast.makeText(
                     context,
-                    "Failed to access the database\n" + it.localizedMessage,
+                    it.localizedMessage,
                     Toast.LENGTH_SHORT
                 ).show()
             }

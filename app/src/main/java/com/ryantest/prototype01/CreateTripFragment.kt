@@ -130,39 +130,48 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                         "seatsLeft" to maxPassengers,
                     )
 
-                    (activity as MainActivity).createLoadingDialog()
+                    if ((activity as MainActivity).isOnline()) {
+                        // User has network access
 
-                    // Add trip hashMap to the database as a document with a random ID
-                    // Set isInTrip user field to true
-                    // Add the new trip's ID as "currentTripID" in user document
-                    db.collection("trips").add(trip)
-                        .addOnSuccessListener { newTrip ->
-                            val userDocument = db.collection("users").document(auth.currentUser!!.uid)
-                            userDocument.update("isInTrip", true)
-                                .addOnSuccessListener {
-                                    userDocument.set(hashMapOf("currentTripID" to newTrip.id), SetOptions.merge())
-                                        .addOnSuccessListener {
-                                            (activity as MainActivity).dismissLoadingDialog()
-                                            (activity as MainActivity).isInTrip = true
-                                            parentFragmentManager.popBackStack()
+                        (activity as MainActivity).createLoadingDialog()
 
-                                            Toast.makeText(
-                                                context,
-                                                "Trip created successfully",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                }
-                        }
-                        .addOnFailureListener {
-                            (activity as MainActivity).dismissLoadingDialog()
+                        // Add trip hashMap to the database as a document with a random ID
+                        // Set isInTrip user field to true
+                        // Add the new trip's ID as "currentTripID" in user document
+                        db.collection("trips").add(trip)
+                            .addOnSuccessListener { newTrip ->
+                                val userDocument = db.collection("users").document(auth.currentUser!!.uid)
+                                userDocument.update("isInTrip", true)
+                                    .addOnSuccessListener {
+                                        userDocument.set(hashMapOf("currentTripID" to newTrip.id), SetOptions.merge())
+                                            .addOnSuccessListener {
+                                                (activity as MainActivity).dismissLoadingDialog()
+                                                (activity as MainActivity).isInTrip = true
+                                                parentFragmentManager.popBackStack()
 
-                            Toast.makeText(
-                                context,
-                                "Failed to access the database\n" + it.localizedMessage,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                                                Toast.makeText(
+                                                    context,
+                                                    "Trip created successfully",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                    }
+                            }
+                            .addOnFailureListener {
+                                (activity as MainActivity).dismissLoadingDialog()
+
+                                Toast.makeText(
+                                    context,
+                                    it.localizedMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    } else {
+                        // No network access
+                        Toast.makeText(context,
+                            "Cannot connect to the internet, please check your network",
+                            Toast.LENGTH_SHORT).show()
+                    }
 
                 } else {
                     // Price input field empty

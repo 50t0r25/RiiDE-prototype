@@ -1,11 +1,11 @@
 package com.ryantest.prototype01
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -125,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener {
                     Toast.makeText(this,
-                        "Failed accessing the database" + it.localizedMessage,
+                        it.localizedMessage,
                         Toast.LENGTH_SHORT).show()
                 }
         } else {
@@ -147,5 +148,24 @@ class MainActivity : AppCompatActivity() {
     // Displays time and date in a TextView
     fun displayTimeInTv(tv : TextView, fHour : Int, fMinute : Int, fDay : Int, fMonth : Int, fYear : Int) {
         tv.text = "Time: ${intDoubleDigit(fHour)}:${intDoubleDigit(fMinute)}\nDate: ${intDoubleDigit(fDay)}/${intDoubleDigit(fMonth)}/$fYear"
+    }
+
+    // Function checks if user has internet access
+    // Not Async, do not want to waste time on it, because of bad documentation
+    // Basically freezes for a few seconds on networks with no internet access
+    // Tried "Solving" the above issue by only checking while on a loading screen, still freezes but not noticeable
+    // Turns out the above solution doesn't actually display the loading for some reasons
+    fun isOnline(): Boolean {
+        val runtime = Runtime.getRuntime()
+        try {
+            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
+            val exitValue = ipProcess.waitFor()
+            return exitValue == 0
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        return false
     }
 }
