@@ -17,6 +17,11 @@ import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
+import java.net.SocketAddress
+import java.util.concurrent.LinkedBlockingQueue
+import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
@@ -151,21 +156,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Function checks if user has internet access
-    // Not Async, do not want to waste time on it, because of bad documentation
-    // Basically freezes for a few seconds on networks with no internet access
-    // Tried "Solving" the above issue by only checking while on a loading screen, still freezes but not noticeable
-    // Turns out the above solution doesn't actually display the loading for some reasons
     fun isOnline(): Boolean {
-        val runtime = Runtime.getRuntime()
-        try {
-            val ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8")
-            val exitValue = ipProcess.waitFor()
-            return exitValue == 0
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-        return false
+        val queue = LinkedBlockingQueue<Boolean>()
+        Thread {
+            try {
+                val timeoutMs = 1500
+                val sock = Socket()
+                val sockaddr: SocketAddress = InetSocketAddress("8.8.8.8", 53)
+                sock.connect(sockaddr, timeoutMs)
+                sock.close()
+                queue.add(true)
+            } catch (e: IOException) {
+                queue.add(false)
+            }
+        }.start()
+        return queue.take()
     }
 }
