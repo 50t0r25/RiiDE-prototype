@@ -141,7 +141,7 @@
                 app:layout_constraintHorizontal_weight="1"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
-                android:text="Seats left: "
+                android:text="Seats taken: "
                 android:textColor="@color/text_color01"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView10"
@@ -226,7 +226,8 @@
                     android:textColor="@color/text_color01"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeColor="@color/text_color01" />
 
                 <Button
                     android:id="@+id/deleteDetailsTv"

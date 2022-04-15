@@ -21,7 +21,6 @@ import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.SocketAddress
 import java.util.concurrent.LinkedBlockingQueue
-import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
@@ -158,6 +157,8 @@ class MainActivity : AppCompatActivity() {
     // Function checks if user has internet access
     fun isOnline(): Boolean {
         val queue = LinkedBlockingQueue<Boolean>()
+        // Start a thread to run check on a non-UI thread
+        // prevents freezing on networks with no internet
         Thread {
             try {
                 val timeoutMs = 1500
