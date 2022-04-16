@@ -235,22 +235,35 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                         .setPositiveButton("Delete") { dialog, _ ->
                             // User clicks delete
 
+                            dialog.dismiss()
                             if ((activity as MainActivity).isOnline()) {
                                 // User has network access
 
                                 (activity as MainActivity).createLoadingDialog()
 
                                 // TODO: Kick passengers out of trip
+                                db.collection("trips").document(tripID)
+                                    .collection("passengers").get()
+                                    .addOnSuccessListener { passengers ->
 
-                                // Flag user as no longer in a trip
-                                db.collection("users").document(auth.currentUser!!.uid).update("isInTrip", false)
-                                    .addOnSuccessListener {
+                                        for (passenger in passengers) {
 
-                                        (activity as MainActivity).isInTrip = false
+                                            db.collection("users").document(passenger.id).update("isInTrip", false)
+                                                .addOnSuccessListener {
+
+                                                    db.collection("trips").document(tripID)
+                                                        .collection("passengers").document(passenger.id).delete()
+                                                }
+                                        }
+
+                                        // Flag driver as no longer in a trip
+                                        db.collection("users").document(driver["userID"].toString()).update("isInTrip", false)
 
                                         // Delete this trip's document from the DB
                                         db.collection("trips").document(tripID).delete()
                                             .addOnSuccessListener {
+
+                                                (activity as MainActivity).isInTrip = false
 
                                                 (activity as MainActivity).dismissLoadingDialog()
 
@@ -259,19 +272,7 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                                     Toast.LENGTH_SHORT).show()
 
                                                 parentFragmentManager.popBackStack()
-
-                                                dialog.dismiss()
                                             }
-                                    }
-                                    .addOnFailureListener {
-                                        // Failed setting user as no longer in trip
-
-                                        (activity as MainActivity).dismissLoadingDialog()
-
-                                        Toast.makeText(
-                                            context,
-                                            it.localizedMessage,
-                                            Toast.LENGTH_SHORT).show()
                                     }
                             } else {
                                 // No network access
