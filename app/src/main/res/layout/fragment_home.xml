@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
@@ -16,6 +17,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
@@ -31,8 +33,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Departure"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:hint="Departure">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/departureEt"
@@ -44,8 +46,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Destination"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:hint="Destination">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/destinationEt"
@@ -61,27 +63,43 @@
                         android:id="@+id/searchCreateButton"
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/squareish_button_background"
                         android:fontFamily="@font/cairo_bold"
                         android:text="Search"
-                        android:layout_marginRight="5dp"
-                        android:textColor="@color/text_color01"
-                        android:background="@drawable/squareish_button_background"/>
+                        android:textColor="@color/text_color01" />
 
                     <ToggleButton
                         android:id="@+id/driverPassengerToggle"
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:background="@drawable/squareish_button_background"
                         android:fontFamily="@font/cairo_bold"
                         android:textColor="@color/text_color01"
                         android:textOff="Passenger"
-                        android:textOn="Driver"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/squareish_button_background"/>
+                        android:textOn="Driver" />
 
                 </LinearLayout>
             </LinearLayout>
+
+            <Button
+                android:id="@+id/allTripsButton"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/squareish_button_background"
+                android:fontFamily="@font/cairo_bold"
+                android:text="Show all available trips"
+                android:textColor="@color/text_color01"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="0.20" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

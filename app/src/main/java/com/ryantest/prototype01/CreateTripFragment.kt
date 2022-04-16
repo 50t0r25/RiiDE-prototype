@@ -147,6 +147,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                                             .addOnSuccessListener {
                                                 (activity as MainActivity).dismissLoadingDialog()
                                                 (activity as MainActivity).isInTrip = true
+                                                (activity as MainActivity).currentTripID = newTrip.id
                                                 parentFragmentManager.popBackStack()
 
                                                 Toast.makeText(

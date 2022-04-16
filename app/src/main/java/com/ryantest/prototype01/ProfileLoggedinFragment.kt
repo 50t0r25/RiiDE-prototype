@@ -59,7 +59,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
                     tripDetailsButton.visibility = View.VISIBLE
 
                     tripDetailsButton.setOnClickListener {
-                        (activity as MainActivity).replaceCurrentFragment(TripDetailsFragment())
+                        (activity as MainActivity).replaceCurrentFragment(TripDetailsFragment(user.data?.get("currentTripID").toString()))
                     }
                 } else {
                     // User isn't currently in a trip

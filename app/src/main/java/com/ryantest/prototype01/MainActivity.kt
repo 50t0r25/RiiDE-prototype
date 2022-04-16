@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var username : String
     lateinit var userEmail : String
     var isInTrip = false
+    lateinit var currentTripID : String
 
     lateinit var departure : String
     lateinit var destination : String
@@ -127,6 +128,7 @@ class MainActivity : AppCompatActivity() {
                     username = user.data!!["username"].toString()
                     userEmail = user.data!!["email"].toString()
                     isInTrip = user.data!!["isInTrip"].toString().toBoolean()
+                    if (isInTrip) currentTripID = user.data!!["currentTripID"].toString()
                 }
                 .addOnFailureListener {
                     Toast.makeText(this,
@@ -152,6 +154,12 @@ class MainActivity : AppCompatActivity() {
     // Displays time and date in a TextView
     fun displayTimeInTv(tv : TextView, fHour : Int, fMinute : Int, fDay : Int, fMonth : Int, fYear : Int) {
         tv.text = "Time: ${intDoubleDigit(fHour)}:${intDoubleDigit(fMinute)}\nDate: ${intDoubleDigit(fDay)}/${intDoubleDigit(fMonth)}/$fYear"
+    }
+
+    // Formats Date (dd/mm/yyyy) to a string
+    // Used to display date in recyclerView elements
+    fun formatDate(fDay : Int, fMonth: Int, fYear: Int) : String {
+        return "${intDoubleDigit(fDay)}/${intDoubleDigit(fMonth)}/$fYear"
     }
 
     // Function checks if user has internet access
