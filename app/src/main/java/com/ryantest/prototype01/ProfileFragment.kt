@@ -10,6 +10,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).navBar.selectedItemId = R.id.page_profile
+
         val signupButton = getView()?.findViewById<Button>(R.id.signupButton)
         val loginButton = getView()?.findViewById<Button>(R.id.loginButton)
 

@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
+    lateinit var navBar: BottomNavigationView
+
     lateinit var username : String
     lateinit var userEmail : String
     var isInTrip = false
@@ -49,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         db = Firebase.firestore
 
-        val navBar = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        navBar = findViewById(R.id.bottom_navigation)
 
         refreshMainActivity()
 

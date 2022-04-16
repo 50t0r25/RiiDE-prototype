@@ -57,7 +57,7 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
                         val tripID = trip.id
                         val fromTo = "From ${trip.data["departure"]} to ${trip.data["destination"]}"
                         val price = "${trip.data["price"]} DZD"
-                        val seats = "${(trip.data["seatsLeft"].toString().toInt() - trip.data["maxPassengers"].toString().toInt())}/${trip.data["maxPassengers"]} Seats"
+                        val seats = "${(trip.data["maxPassengers"].toString().toInt() - trip.data["seatsLeft"].toString().toInt())}/${trip.data["maxPassengers"]} Seats"
                         val tripDate = (activity as MainActivity).formatDate(date["day"].toString().toInt(),date["month"].toString().toInt(),date["year"].toString().toInt())
 
                         tripsList.add(TripItem(tripID,fromTo,price,seats,tripDate))
