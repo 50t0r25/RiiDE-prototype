@@ -27,8 +27,6 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).navBar.selectedItemId = R.id.page_profile
-
         auth = Firebase.auth
         db = Firebase.firestore
 

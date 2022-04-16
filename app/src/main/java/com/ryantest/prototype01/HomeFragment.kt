@@ -21,8 +21,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).navBar.selectedItemId = R.id.page_home
-
         passengerDriverToggle = requireView().findViewById(R.id.driverPassengerToggle)
         searchCreateButton = requireView().findViewById(R.id.searchCreateButton)
         allTripsButton = requireView().findViewById(R.id.allTripsButton)

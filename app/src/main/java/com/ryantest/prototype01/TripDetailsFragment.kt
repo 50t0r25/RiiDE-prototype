@@ -148,6 +148,7 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                                 hashMapOf("username" to (activity as MainActivity).username)
                                             )
                                             .addOnSuccessListener {
+                                                // Everything successful
 
                                                 (activity as MainActivity).dismissLoadingDialog()
 
@@ -155,12 +156,59 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                                     "Trip joined successfully",
                                                     Toast.LENGTH_SHORT).show()
 
-                                                (activity as MainActivity).setCurrentFragment(ProfileLoggedinFragment())
+                                                (activity as MainActivity).navBar.selectedItemId = R.id.page_profile
                                             }
                                     }
                             }
 
 
+                    } else {
+                        // No network access
+
+                        Toast.makeText(context,
+                            "Cannot connect to the internet, please check your network",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                // Leave button clicked
+                // will set user as no longer in trip
+                // then remove user from the trip's "passengers" collection
+                leaveButton.setOnClickListener {
+
+                    // Check if user is online
+                    if ((activity as MainActivity).isOnline()) {
+                        // User has internet
+
+                        (activity as MainActivity).createLoadingDialog()
+
+                        // Set user as not in a trip
+                        db.collection("users").document(auth.currentUser!!.uid).update("isInTrip", false)
+                            .addOnSuccessListener {
+
+                                // Cache variable
+                                (activity as MainActivity).isInTrip = true
+
+                                // Update the number of seats left in the trip document
+                                db.collection("trips").document(tripID).update("seatsLeft", seatsLeft + 1)
+                                    .addOnSuccessListener {
+
+                                        // Delete user from the passengers subcollection
+                                        db.collection("trips").document(tripID)
+                                            .collection("passengers").document(auth.currentUser!!.uid).delete()
+                                            .addOnSuccessListener {
+                                                // Everything successful
+
+                                                (activity as MainActivity).dismissLoadingDialog()
+
+                                                Toast.makeText(context,
+                                                    "Trip left successfully",
+                                                    Toast.LENGTH_SHORT).show()
+
+                                                parentFragmentManager.popBackStack()
+                                            }
+                                    }
+                            }
                     } else {
                         // No network access
 
@@ -198,6 +246,8 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                 db.collection("users").document(auth.currentUser!!.uid).update("isInTrip", false)
                                     .addOnSuccessListener {
 
+                                        (activity as MainActivity).isInTrip = false
+
                                         // Delete this trip's document from the DB
                                         db.collection("trips").document(tripID).delete()
                                             .addOnSuccessListener {
@@ -208,7 +258,6 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                                     "Trip deleted successfully",
                                                     Toast.LENGTH_SHORT).show()
 
-                                                (activity as MainActivity).isInTrip = false
                                                 parentFragmentManager.popBackStack()
 
                                                 dialog.dismiss()
