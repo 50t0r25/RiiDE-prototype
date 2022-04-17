@@ -160,6 +160,17 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                             }
                                     }
                             }
+                            .addOnFailureListener {
+                                // Could not set new user data
+
+                                (activity as MainActivity).dismissLoadingDialog()
+
+                                Toast.makeText(
+                                    context,
+                                    it.localizedMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
 
                     } else {
@@ -209,6 +220,17 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                             }
                                     }
                             }
+                            .addOnFailureListener {
+                                // Could not update user data
+
+                                (activity as MainActivity).dismissLoadingDialog()
+
+                                Toast.makeText(
+                                    context,
+                                    it.localizedMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                     } else {
                         // No network access
 
@@ -241,16 +263,19 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
 
                                 (activity as MainActivity).createLoadingDialog()
 
-                                // TODO: Kick passengers out of trip
+                                // Fetch all passengers in the trip
                                 db.collection("trips").document(tripID)
                                     .collection("passengers").get()
                                     .addOnSuccessListener { passengers ->
 
+                                        // Cycle through the passengers to kick them from the trip
                                         for (passenger in passengers) {
 
+                                            // Set each passenger as no longer in a trip
                                             db.collection("users").document(passenger.id).update("isInTrip", false)
                                                 .addOnSuccessListener {
 
+                                                    // Delete all passenger documents from the passengers subcollection
                                                     db.collection("trips").document(tripID)
                                                         .collection("passengers").document(passenger.id).delete()
                                                 }
@@ -262,6 +287,7 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                                         // Delete this trip's document from the DB
                                         db.collection("trips").document(tripID).delete()
                                             .addOnSuccessListener {
+                                                // Everything successful
 
                                                 (activity as MainActivity).isInTrip = false
 
@@ -273,6 +299,17 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
 
                                                 parentFragmentManager.popBackStack()
                                             }
+                                    }
+                                    .addOnFailureListener {
+                                        // Could not fetch passengers data
+
+                                        (activity as MainActivity).dismissLoadingDialog()
+
+                                        Toast.makeText(
+                                            context,
+                                            it.localizedMessage,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                             } else {
                                 // No network access

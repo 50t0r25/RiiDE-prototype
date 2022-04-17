@@ -43,12 +43,16 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
         // Fetch all trips from db
         db.collection("trips").get()
             .addOnSuccessListener { trips ->
+
                 // If no trips are found, hide recyclerView and show the no trips available text
                 if (trips.isEmpty) {
+
                     tripsRv.visibility = View.GONE
                     noTripsFoundTv.visibility = View.VISIBLE
                     (activity as MainActivity).dismissLoadingDialog()
+
                 } else {
+
                     // Save every found trip's data inside the tripsList list of TripItem(s)
                     // TripItem is a data class that stores all needed info to show trips inside small elements
                     for (trip in trips) {
@@ -61,7 +65,9 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
                         val tripDate = (activity as MainActivity).formatDate(date["day"].toString().toInt(),date["month"].toString().toInt(),date["year"].toString().toInt())
 
                         tripsList.add(TripItem(tripID,fromTo,price,seats,tripDate))
+
                     }
+
                     (activity as MainActivity).dismissLoadingDialog()
 
                     // Initialize the adapter to show the list of found trips inside the recyclerView

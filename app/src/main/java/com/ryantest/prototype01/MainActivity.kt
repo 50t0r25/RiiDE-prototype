@@ -116,9 +116,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun refreshMainActivity() {
+
         // Check if user is logged in
         val currentUser = auth.currentUser
         if(currentUser != null){
+
             // User logged in, set the profile fragment to be the logged in one
             fragmentProfile = ProfileLoggedinFragment()
             isLoggedIn = true
@@ -127,12 +129,15 @@ class MainActivity : AppCompatActivity() {
             // Then fetch the user data from the DB
             db.collection("users").document(currentUser.uid).get(Source.CACHE)
                 .addOnSuccessListener { user ->
+
                     username = user.data!!["username"].toString()
                     userEmail = user.data!!["email"].toString()
                     isInTrip = user.data!!["isInTrip"].toString().toBoolean()
                     if (isInTrip) currentTripID = user.data!!["currentTripID"].toString()
+
                 }
                 .addOnFailureListener {
+
                     Toast.makeText(this,
                         it.localizedMessage,
                         Toast.LENGTH_SHORT).show()
@@ -167,6 +172,7 @@ class MainActivity : AppCompatActivity() {
     // Function checks if user has internet access
     fun isOnline(): Boolean {
         val queue = LinkedBlockingQueue<Boolean>()
+
         // Start a thread to run check on a non-UI thread
         // prevents freezing on networks with no internet
         Thread {
