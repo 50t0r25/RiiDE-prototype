@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ryantest.prototype01.databinding.ItemTripBinding
 
-class TripsAdapter(var tripItems: List<TripItem>,private val onItemClicked: (tripItems: List<TripItem>,position: Int) -> Unit): RecyclerView.Adapter<TripsAdapter.TripsViewHolder>() {
+class TripsAdapter(var tripItems: List<TripItem>,private val onItemClicked: (position: Int) -> Unit): RecyclerView.Adapter<TripsAdapter.TripsViewHolder>() {
 
     // I mainly DO NOT HAVE A SINGLE CLUE what is happening in this class
     // All i know is that i passed the onItemClick function as a parameter to be able to execute code when items are clicked
@@ -21,7 +21,7 @@ class TripsAdapter(var tripItems: List<TripItem>,private val onItemClicked: (tri
     override fun onBindViewHolder(holder: TripsViewHolder, position: Int) {
         holder.binding.apply {
             itemTripCard.setOnClickListener {
-                onItemClicked(tripItems,position)
+                onItemClicked(position)
             }
             itemTripFromToTv.text = tripItems[position].fromTo
             itemTripPriceTv.text = tripItems[position].price

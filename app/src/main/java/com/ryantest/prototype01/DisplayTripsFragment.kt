@@ -28,16 +28,17 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
 
         db = Firebase.firestore
 
+        tripsList = emptyList<TripItem>().toMutableList()
+
         // Makes function for item clicks that will be passed to the adapter constructor
         // Will be used inside the adapter as a click listener to load a X trip's details
-        fun onListItemClick(tripItems: List<TripItem>,position: Int) {
-            (activity as MainActivity).replaceCurrentFragment(TripDetailsFragment(tripItems[position].ID))
+        fun onListItemClick(position: Int) {
+            (activity as MainActivity).replaceCurrentFragment(TripDetailsFragment(tripsList[position].ID))
         }
+
         backButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
-
-        tripsList = emptyList<TripItem>().toMutableList()
 
         (activity as MainActivity).createLoadingDialog()
         // Fetch all trips from db
@@ -71,7 +72,7 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
                     (activity as MainActivity).dismissLoadingDialog()
 
                     // Initialize the adapter to show the list of found trips inside the recyclerView
-                    val adapter = TripsAdapter(tripsList,{tripItems,position -> onListItemClick(tripItems,position)})
+                    val adapter = TripsAdapter(tripsList,{position -> onListItemClick(position)})
                     tripsRv.adapter = adapter
                     tripsRv.layoutManager = LinearLayoutManager(context)
                 }
