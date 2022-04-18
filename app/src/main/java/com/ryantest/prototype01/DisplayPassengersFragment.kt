@@ -63,9 +63,14 @@ class DisplayPassengersFragment(newTripID: String) : Fragment(R.layout.fragment_
                     // Save each passengers ID and username to the PassengerItem List
                     for (passenger in passengers) {
 
-                        // Add " (You)" next to the current user's username
+                        // Add " (You)" next to the current user's username if user is logged in
                         var username = passenger["username"].toString()
-                        if (username == (activity as MainActivity).username) username = username.plus(" (You)")
+
+                        if ((activity as MainActivity).isLoggedIn) {
+
+                            if (username == (activity as MainActivity).username)
+                                username = username.plus(" (You)")
+                        }
 
                         passengersList.add(PassengerItem(passenger.id, username))
                     }

@@ -43,7 +43,7 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
 
                 // Used to check if the trip is the one that the user is currently in
                 1 -> {
-                    if ((activity as MainActivity).isLoggedIn){
+                    if ((activity as MainActivity).isLoggedIn && (activity as MainActivity).isInTrip){
                         ((activity as MainActivity).currentTripID == tripsList[position].ID)
                     } else false
                 }

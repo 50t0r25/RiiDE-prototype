@@ -204,7 +204,7 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
                             .addOnSuccessListener {
 
                                 // Cache variable
-                                (activity as MainActivity).isInTrip = true
+                                (activity as MainActivity).isInTrip = false
 
                                 // Update the number of seats left in the trip document
                                 db.collection("trips").document(tripID).update("seatsLeft", seatsLeft + 1)
