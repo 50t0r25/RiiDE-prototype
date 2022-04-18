@@ -7,8 +7,6 @@ import com.ryantest.prototype01.databinding.ItemPassengerBinding
 
 class PassengersAdapter(var passengerItems: List<PassengerItem>,private val onItemClicked: (position: Int) -> Unit): RecyclerView.Adapter<PassengersAdapter.PassengersViewHolder>() {
 
-    // I mainly DO NOT HAVE A SINGLE CLUE what is happening in this class
-    // All i know is that i passed the onItemClick function as a parameter to be able to execute code when items are clicked
     inner class PassengersViewHolder(val binding: ItemPassengerBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PassengersViewHolder {

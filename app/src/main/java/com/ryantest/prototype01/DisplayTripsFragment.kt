@@ -30,10 +30,26 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
 
         tripsList = emptyList<TripItem>().toMutableList()
 
-        // Makes function for item clicks that will be passed to the adapter constructor
-        // Will be used inside the adapter as a click listener to load X trip's details
-        fun onListItemClick(position: Int) {
-            (activity as MainActivity).replaceCurrentFragment(TripDetailsFragment(tripsList[position].ID))
+        // Function will be passed to the adapter to run stuff that can't be run inside it otherwise
+        fun adapterFunction(position: Int, partToRun : Int) : Boolean {
+
+            return when (partToRun) {
+
+                // Used when a trip is clicked, will load the details of that trip
+                0 -> {
+                    (activity as MainActivity).replaceCurrentFragment(TripDetailsFragment(tripsList[position].ID))
+                    false
+                }
+
+                // Used to check if the trip is the one that the user is currently in
+                1 -> {
+                    if ((activity as MainActivity).isLoggedIn){
+                        ((activity as MainActivity).currentTripID == tripsList[position].ID)
+                    } else false
+                }
+
+                else -> false
+            }
         }
 
         backButton.setOnClickListener {
@@ -73,7 +89,7 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
                     (activity as MainActivity).dismissLoadingDialog()
 
                     // Initialize the adapter to show the list of found trips inside the recyclerView
-                    val adapter = TripsAdapter(tripsList,{position -> onListItemClick(position)})
+                    val adapter = TripsAdapter(tripsList,{position, partToRun -> adapterFunction(position, partToRun)})
                     tripsRv.adapter = adapter
                     tripsRv.layoutManager = LinearLayoutManager(context)
                 }

@@ -5,11 +5,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+
 
 class DisplayPassengersFragment(newTripID: String) : Fragment(R.layout.fragment_display_passengers) {
 
@@ -61,7 +63,11 @@ class DisplayPassengersFragment(newTripID: String) : Fragment(R.layout.fragment_
                     // Save each passengers ID and username to the PassengerItem List
                     for (passenger in passengers) {
 
-                        passengersList.add(PassengerItem(passenger.id, passenger["username"].toString()))
+                        // Add " (You)" next to the current user's username
+                        var username = passenger["username"].toString()
+                        if (username == (activity as MainActivity).username) username = username.plus(" (You)")
+
+                        passengersList.add(PassengerItem(passenger.id, username))
                     }
 
                     (activity as MainActivity).dismissLoadingDialog()
@@ -70,6 +76,13 @@ class DisplayPassengersFragment(newTripID: String) : Fragment(R.layout.fragment_
                     val adapter = PassengersAdapter(passengersList,{position -> onListItemClick(position)})
                     passengersRv.adapter = adapter
                     passengersRv.layoutManager = LinearLayoutManager(context)
+
+                    passengersRv.addItemDecoration(
+                        DividerItemDecoration(
+                            passengersRv.context,
+                            DividerItemDecoration.VERTICAL
+                        )
+                    )
 
                 }
             }

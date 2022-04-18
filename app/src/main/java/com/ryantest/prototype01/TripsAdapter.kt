@@ -1,14 +1,13 @@
 package com.ryantest.prototype01
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ryantest.prototype01.databinding.ItemTripBinding
 
-class TripsAdapter(var tripItems: List<TripItem>,private val onItemClicked: (position: Int) -> Unit): RecyclerView.Adapter<TripsAdapter.TripsViewHolder>() {
+class TripsAdapter(var tripItems: List<TripItem>,private val adapterFunction: (position: Int, partToRun: Int) -> Boolean): RecyclerView.Adapter<TripsAdapter.TripsViewHolder>() {
 
-    // I mainly DO NOT HAVE A SINGLE CLUE what is happening in this class
-    // All i know is that i passed the onItemClick function as a parameter to be able to execute code when items are clicked
     inner class TripsViewHolder(val binding: ItemTripBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripsViewHolder {
@@ -20,8 +19,13 @@ class TripsAdapter(var tripItems: List<TripItem>,private val onItemClicked: (pos
 
     override fun onBindViewHolder(holder: TripsViewHolder, position: Int) {
         holder.binding.apply {
+
+            // Change the outline color of the trip that the user is currently in
+            if (adapterFunction(position,1))
+                itemTripCard.strokeColor = Color.parseColor("#92D8AE")
+
             itemTripCard.setOnClickListener {
-                onItemClicked(position)
+                adapterFunction(position,0)
             }
             itemTripFromToTv.text = tripItems[position].fromTo
             itemTripPriceTv.text = tripItems[position].price
