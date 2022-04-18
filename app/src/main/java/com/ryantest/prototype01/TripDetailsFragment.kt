@@ -30,6 +30,7 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
     private lateinit var deleteButton : Button
     private lateinit var joinButton : Button
     private lateinit var leaveButton : Button
+    private lateinit var viewPassengersButton : Button
 
     private val tripID = newTripID
 
@@ -49,6 +50,11 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
         deleteButton = requireView().findViewById(R.id.deleteDetailsButton)
         joinButton = requireView().findViewById(R.id.joinDetailsButton)
         leaveButton = requireView().findViewById(R.id.leaveDetailsButton)
+        viewPassengersButton = requireView().findViewById(R.id.viewPassengersButton)
+
+        viewPassengersButton.setOnClickListener {
+            (activity as MainActivity).replaceCurrentFragment(DisplayPassengersFragment(tripID))
+        }
 
         backButton.setOnClickListener {
             parentFragmentManager.popBackStack()

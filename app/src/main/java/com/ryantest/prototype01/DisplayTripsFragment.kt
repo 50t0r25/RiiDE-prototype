@@ -31,7 +31,7 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
         tripsList = emptyList<TripItem>().toMutableList()
 
         // Makes function for item clicks that will be passed to the adapter constructor
-        // Will be used inside the adapter as a click listener to load a X trip's details
+        // Will be used inside the adapter as a click listener to load X trip's details
         fun onListItemClick(position: Int) {
             (activity as MainActivity).replaceCurrentFragment(TripDetailsFragment(tripsList[position].ID))
         }
@@ -41,6 +41,7 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
         }
 
         (activity as MainActivity).createLoadingDialog()
+
         // Fetch all trips from db
         db.collection("trips").get()
             .addOnSuccessListener { trips ->
