@@ -13,15 +13,13 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
-class DisplayPassengersFragment(newTripID: String) : Fragment(R.layout.fragment_display_passengers) {
+class DisplayPassengersFragment(private val tripID: String) : Fragment(R.layout.fragment_display_passengers) {
 
     private lateinit var passengersRv : RecyclerView
     private lateinit var noPassengersFoundTv : TextView
     private lateinit var backButton : Button
     private lateinit var db: FirebaseFirestore
     private lateinit var passengersList: MutableList<PassengerItem>
-
-    private val tripID = newTripID
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

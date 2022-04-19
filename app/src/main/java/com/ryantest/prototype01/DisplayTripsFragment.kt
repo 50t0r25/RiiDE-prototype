@@ -8,13 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
+class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragment_display_trips) {
 
     private lateinit var tripsRv : RecyclerView
     private lateinit var noTripsFoundTv : TextView
+    private lateinit var titleTv : TextView
     private lateinit var backButton : Button
     private lateinit var db: FirebaseFirestore
     private lateinit var tripsList: MutableList<TripItem>
@@ -24,6 +26,7 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
 
         tripsRv = requireView().findViewById(R.id.tripsRv)
         noTripsFoundTv = requireView().findViewById(R.id.noTripsFoundTv)
+        titleTv = requireView().findViewById(R.id.displayTripsTitleTv)
         backButton = requireView().findViewById(R.id.displayTripsBackButton)
 
         db = Firebase.firestore
@@ -58,42 +61,120 @@ class DisplayTripsFragment : Fragment(R.layout.fragment_display_trips) {
 
         (activity as MainActivity).createLoadingDialog()
 
-        // Fetch all trips from db
-        db.collection("trips").get()
-            .addOnSuccessListener { trips ->
+        when (whatToRun) {
 
-                // If no trips are found, hide recyclerView and show the no trips available text
-                if (trips.isEmpty) {
+            // Search trips in db
+            0 -> {
 
-                    tripsRv.visibility = View.GONE
-                    noTripsFoundTv.visibility = View.VISIBLE
-                    (activity as MainActivity).dismissLoadingDialog()
+                val departure = (activity as MainActivity).departure
+                val destination = (activity as MainActivity).destination
 
-                } else {
+                // Will do a compound query to first get results for exact departure and destination matches
+                // Then adds results that match destination but not departure
+                // Finally adds up results that match departure but no destination
+                // NOTE: This requires indexing in the database, if requests ever start failing, look into that
+                db.collection("trips")
+                    .whereEqualTo("departure", departure)
+                    .whereEqualTo("destination", destination)
+                    .get()
+                    .addOnSuccessListener { trips ->
 
-                    // Save every found trip's data inside the tripsList list of TripItem(s)
-                    // TripItem is a data class that stores all needed info to show trips inside small elements
-                    for (trip in trips) {
-                        val date = trip.data["date"] as HashMap<*, *>
+                        for (trip in trips) {
+                            addTripToList(trip)
+                        }
 
-                        val tripID = trip.id
-                        val fromTo = "From ${trip.data["departure"]} to ${trip.data["destination"]}"
-                        val price = "${trip.data["price"]} DZD"
-                        val seats = "${(trip.data["maxPassengers"].toString().toInt() - trip.data["seatsLeft"].toString().toInt())}/${trip.data["maxPassengers"]} Seats"
-                        val tripDate = (activity as MainActivity).formatDate(date["day"].toString().toInt(),date["month"].toString().toInt(),date["year"].toString().toInt())
+                        db.collection("trips")
+                            .whereNotEqualTo("departure", departure)
+                            .whereEqualTo("destination", destination)
+                            .get()
+                            .addOnSuccessListener { trips1 ->
 
-                        tripsList.add(TripItem(tripID,fromTo,price,seats,tripDate))
+                                for (trip in trips1) {
+                                    addTripToList(trip)
+                                }
 
+                                db.collection("trips")
+                                    .whereEqualTo("departure", departure)
+                                    .whereNotEqualTo("destination", destination)
+                                    .get()
+                                    .addOnSuccessListener { trips2 ->
+
+                                        for (trip in trips2) {
+                                            addTripToList(trip)
+                                        }
+
+                                        titleTv.text = "Results for $departure to $destination:"
+
+                                        // If no trips are found, hide recyclerView and show the no trips available text
+                                        if (tripsList.isEmpty()) {
+
+                                            tripsRv.visibility = View.GONE
+                                            noTripsFoundTv.visibility = View.VISIBLE
+                                            (activity as MainActivity).dismissLoadingDialog()
+
+                                        } else {
+
+                                            (activity as MainActivity).dismissLoadingDialog()
+
+                                            // Initialize the adapter to show the list of found trips inside the recyclerView
+                                            val adapter = TripsAdapter(tripsList,{position, partToRun -> adapterFunction(position, partToRun)})
+                                            tripsRv.adapter = adapter
+                                            tripsRv.layoutManager = LinearLayoutManager(context)
+
+                                        }
+
+                                    }
+                            }
+                    }
+            }
+
+            // Fetch all trips from db
+            1 -> {
+
+                db.collection("trips").get()
+                    .addOnSuccessListener { trips ->
+
+                        // If no trips are found, hide recyclerView and show the no trips available text
+                        if (trips.isEmpty) {
+
+                            tripsRv.visibility = View.GONE
+                            noTripsFoundTv.visibility = View.VISIBLE
+                            (activity as MainActivity).dismissLoadingDialog()
+
+                        } else {
+
+                            for (trip in trips) {
+                                addTripToList(trip)
+                            }
+
+                            (activity as MainActivity).dismissLoadingDialog()
+
+                            // Initialize the adapter to show the list of found trips inside the recyclerView
+                            val adapter = TripsAdapter(tripsList,{position, partToRun -> adapterFunction(position, partToRun)})
+                            tripsRv.adapter = adapter
+                            tripsRv.layoutManager = LinearLayoutManager(context)
+                        }
                     }
 
-                    (activity as MainActivity).dismissLoadingDialog()
-
-                    // Initialize the adapter to show the list of found trips inside the recyclerView
-                    val adapter = TripsAdapter(tripsList,{position, partToRun -> adapterFunction(position, partToRun)})
-                    tripsRv.adapter = adapter
-                    tripsRv.layoutManager = LinearLayoutManager(context)
-                }
+            }
         }
+
+    }
+
+    // Save every found trip's data inside the tripsList list of TripItem(s)
+    // TripItem is a data class that stores all needed info to show trips inside small elements
+    private fun addTripToList(trip: QueryDocumentSnapshot) {
+
+        val date = trip.data["date"] as HashMap<*, *>
+
+        val tripID = trip.id
+        val fromTo = "From ${trip.data["departure"]} to ${trip.data["destination"]}"
+        val price = "${trip.data["price"]} DZD"
+        val seats = "${(trip.data["maxPassengers"].toString().toInt() - trip.data["seatsLeft"].toString().toInt())}/${trip.data["maxPassengers"]} Seats"
+        val tripDate = (activity as MainActivity).formatDate(date["day"].toString().toInt(),date["month"].toString().toInt(),date["year"].toString().toInt())
+
+        tripsList.add(TripItem(tripID,fromTo,price,seats,tripDate))
+
     }
 
 }

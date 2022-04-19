@@ -18,7 +18,7 @@
             android:padding="20dp">
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/displayTripsTitleTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
@@ -37,7 +37,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/displayTripsBackButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintTop_toBottomOf="@+id/displayTripsTitleTv" />
 
             <Button
                 android:id="@+id/displayTripsBackButton"
@@ -63,7 +63,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/displayTripsBackButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                app:layout_constraintTop_toBottomOf="@+id/displayTripsTitleTv" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

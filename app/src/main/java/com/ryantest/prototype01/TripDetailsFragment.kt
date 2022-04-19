@@ -14,7 +14,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_details) {
+class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragment_trip_details) {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
@@ -31,8 +31,6 @@ class TripDetailsFragment(newTripID: String) : Fragment(R.layout.fragment_trip_d
     private lateinit var joinButton : Button
     private lateinit var leaveButton : Button
     private lateinit var viewPassengersButton : Button
-
-    private val tripID = newTripID
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

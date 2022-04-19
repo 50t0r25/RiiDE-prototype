@@ -39,39 +39,54 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         allTripsButton.setOnClickListener {
-            (activity as MainActivity).replaceCurrentFragment(DisplayTripsFragment())
+            (activity as MainActivity).replaceCurrentFragment(DisplayTripsFragment(1))
         }
 
         searchCreateButton.setOnClickListener {
-            if (isPassenger) {
-                // TODO: Search for a trip
-            } else {
-                // Checks if the user is logged in first
-                if ((activity as MainActivity).isLoggedIn) {
-                    // Get the departure and destination, put them in the activity's global variables
-                    // Then start the fragment to create trips
-                    (activity as MainActivity).departure = departure.text.toString().trim().lowercase()
-                    (activity as MainActivity).destination = destination.text.toString().trim().lowercase()
 
-                    if (!((activity as MainActivity).departure == "" || (activity as MainActivity).destination == "")) {
+            // Put departure and destination from user input to variables in the activity
+            (activity as MainActivity).departure = departure.text.toString().trim().lowercase()
+            (activity as MainActivity).destination = destination.text.toString().trim().lowercase()
+
+            if ((activity as MainActivity).departure == "" || (activity as MainActivity).destination == "") {
+                // Empty field
+
+                Toast.makeText(
+                    context, "Please refill the fields correctly",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            } else {
+                // Departure and destination input should be valid
+
+                if (isPassenger) {
+                    // Search for a trip
+
+                    departure.setText("")
+                    destination.setText("")
+
+                    (activity as MainActivity).replaceCurrentFragment(DisplayTripsFragment(0))
+
+                } else {
+                    // Create a trip
+
+                    // Checks if the user is logged in
+                    if ((activity as MainActivity).isLoggedIn) {
+
                         departure.setText("")
                         destination.setText("")
 
                         (activity as MainActivity).replaceCurrentFragment(CreateTripFragment())
                     } else {
-                        // Empty field
+
+                        // User not logged in
                         Toast.makeText(
-                            context, "Please refill the fields correctly",
+                            context, "Please Login or create an account first",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
-                } else {
-                    // User not logged in
-                    Toast.makeText(
-                        context, "Please Login or create an account first",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
+
             }
         }
     }
