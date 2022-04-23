@@ -1,6 +1,8 @@
 package com.ryantest.prototype01
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -109,11 +111,25 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                 destinationTv.text = tripData["destination"].toString()
 
                 // If the user is the driver, adds "(You)" next to their username
+                var newDriverUsername = ""
                 if (isDriver) {
-                    driverUsernameTv.text = driver["username"].toString().plus(" (You)")
+                    newDriverUsername = driver["username"].toString().plus(" (You)")
                 } else {
-                    driverUsernameTv.text = driver["username"].toString()
+                    newDriverUsername = driver["username"].toString()
                 }
+
+                // This spannableString will make the driver's username underlined
+                val usernameSpannableString = SpannableString(newDriverUsername)
+                usernameSpannableString.setSpan(UnderlineSpan(), 0, usernameSpannableString.length, 0)
+                driverUsernameTv.text = usernameSpannableString
+
+                // Set listener to open driver's info when their username is clicked
+                driverUsernameTv.setOnClickListener {
+                    // TODO: Load driver's profile
+                    (activity as MainActivity).replaceCurrentFragment(UserInfoFragment())
+                    // driver["userID"]
+                }
+
                 seatsLeftTv.text = "${(tripData["maxPassengers"].toString().toInt()) - seatsLeft}/${tripData["maxPassengers"]}".plus(seatsFull)
                 priceTv.text = tripData["price"].toString().plus(" DZD")
 

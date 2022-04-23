@@ -1,5 +1,7 @@
 package com.ryantest.prototype01
 
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +21,10 @@ class PassengersAdapter(var passengerItems: List<PassengerItem>,private val onIt
     override fun onBindViewHolder(holder: PassengersViewHolder, position: Int) {
         holder.binding.apply {
 
-            passengerNameTv.text = passengerItems[position].username
+            // Display underlined passenger username
+            val usernameSpannableString = SpannableString(passengerItems[position].username)
+            usernameSpannableString.setSpan(UnderlineSpan(), 0, usernameSpannableString.length, 0)
+            passengerNameTv.text = usernameSpannableString
 
             passengerNameTv.setOnClickListener {
                 onItemClicked(position)

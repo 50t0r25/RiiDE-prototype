@@ -35,7 +35,8 @@ class DisplayPassengersFragment(private val tripID: String) : Fragment(R.layout.
         // Will be used inside the adapter as a click listener to load X passenger's profile
         fun onListItemClick(position: Int) {
             // TODO: Load passenger's profile
-            // (activity as MainActivity).replaceCurrentFragment(UserInfoFragment(passengersList[position].ID))
+            (activity as MainActivity).replaceCurrentFragment(UserInfoFragment())
+            // passengersList[position].ID
         }
 
         backButton.setOnClickListener {
