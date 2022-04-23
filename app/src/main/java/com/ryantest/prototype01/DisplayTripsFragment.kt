@@ -69,6 +69,8 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
                 val departure = (activity as MainActivity).departure
                 val destination = (activity as MainActivity).destination
 
+                titleTv.text = "Results for $departure to $destination:"
+
                 // Will do a compound query to first get results for exact departure and destination matches
                 // Then adds results that match destination but not departure
                 // Finally adds up results that match departure but no destination
@@ -102,8 +104,6 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
                                         for (trip in trips2) {
                                             addTripToList(trip)
                                         }
-
-                                        titleTv.text = "Results for $departure to $destination:"
 
                                         // If no trips are found, hide recyclerView and show the no trips available text
                                         if (tripsList.isEmpty()) {
