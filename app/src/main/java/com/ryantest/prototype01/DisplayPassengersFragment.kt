@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,9 +35,14 @@ class DisplayPassengersFragment(private val tripID: String) : Fragment(R.layout.
         // Makes function for item clicks that will be passed to the adapter constructor
         // Will be used inside the adapter as a click listener to load X passenger's profile
         fun onListItemClick(position: Int) {
-            // TODO: Load passenger's profile
-            (activity as MainActivity).replaceCurrentFragment(UserInfoFragment())
-            // passengersList[position].ID
+            if ((activity as MainActivity).isLoggedIn) {
+                (activity as MainActivity).replaceCurrentFragment(UserInfoFragment(passengersList[position].ID))
+            } else {
+                Toast.makeText(
+                    context, "Please Login or create an account first",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         backButton.setOnClickListener {

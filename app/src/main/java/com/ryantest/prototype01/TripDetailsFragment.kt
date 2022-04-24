@@ -69,7 +69,6 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
             .addOnSuccessListener { trip ->
 
                 // Save the trip data to their variables
-                // TODO: save passengers data
                 // Since Date and Driver are Object fields, we cast them as HashMaps
                 val tripData = trip.data
                 val date = tripData?.get("date") as HashMap<*, *>
@@ -123,11 +122,16 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                 usernameSpannableString.setSpan(UnderlineSpan(), 0, usernameSpannableString.length, 0)
                 driverUsernameTv.text = usernameSpannableString
 
-                // Set listener to open driver's info when their username is clicked
+                // Set listener to open driver's info when their username is clicked if the user is logged in
                 driverUsernameTv.setOnClickListener {
-                    // TODO: Load driver's profile
-                    (activity as MainActivity).replaceCurrentFragment(UserInfoFragment())
-                    // driver["userID"]
+                    if ((activity as MainActivity).isLoggedIn) {
+                        (activity as MainActivity).replaceCurrentFragment(UserInfoFragment(driver["userID"].toString()))
+                    } else {
+                        Toast.makeText(
+                            context, "Please Login or create an account first",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
 
                 seatsLeftTv.text = "${(tripData["maxPassengers"].toString().toInt()) - seatsLeft}/${tripData["maxPassengers"]}".plus(seatsFull)

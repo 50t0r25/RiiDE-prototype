@@ -56,6 +56,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
             "username" to username,
             "email" to email,
             "isInTrip" to false,
+            "filledInfo" to false
         )
 
 
@@ -91,6 +92,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                                     (activity as MainActivity).userEmail = email
                                     (activity as MainActivity).username = username
                                     (activity as MainActivity).isInTrip = false
+                                    (activity as MainActivity).filledInfo = false
 
                                     // Refreshes the activity to logged in state and sets the new fragment
                                     (activity as MainActivity).refreshMainActivity()

@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var username : String
     lateinit var userEmail : String
     var isInTrip = false
+    var filledInfo = false
     lateinit var currentTripID : String
 
     lateinit var departure : String
@@ -133,6 +134,7 @@ class MainActivity : AppCompatActivity() {
                     username = user.data!!["username"].toString()
                     userEmail = user.data!!["email"].toString()
                     isInTrip = user.data!!["isInTrip"].toString().toBoolean()
+                    filledInfo = user.data!!["filledInfo"].toString().toBoolean()
                     if (isInTrip) currentTripID = user.data!!["currentTripID"].toString()
 
                 }
