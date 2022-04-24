@@ -20,6 +20,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
 
     private lateinit var logoutButton : Button
     private lateinit var tripDetailsButton : Button
+    private lateinit var openProfileButton : Button
     private lateinit var userEmailTv : TextView
     private lateinit var userNameTv : TextView
     private lateinit var isInTripTv : TextView
@@ -32,6 +33,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
 
         logoutButton = requireView().findViewById(R.id.logoutButton)
         tripDetailsButton = requireView().findViewById(R.id.tripDetailsButton)
+        openProfileButton = requireView().findViewById(R.id.openProfileInfoButton)
         userEmailTv = requireView().findViewById(R.id.userEmailTv)
         userNameTv = requireView().findViewById(R.id.userNameTv)
         isInTripTv = requireView().findViewById(R.id.isInTripTv)
@@ -44,8 +46,13 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
             isInTripTv.text = "Current trip details:"
             tripDetailsButton.visibility = View.VISIBLE
         } else {
-            isInTripTv.text = "You are currenly not in a trip"
+            isInTripTv.text = "You currently aren't in a trip"
             tripDetailsButton.visibility = View.GONE
+        }
+
+        openProfileButton.setOnClickListener {
+            // Will open the current user's profile info
+            (activity as MainActivity).replaceCurrentFragment(UserInfoFragment(auth.currentUser!!.uid))
         }
 
         // Check the trip user state from the database

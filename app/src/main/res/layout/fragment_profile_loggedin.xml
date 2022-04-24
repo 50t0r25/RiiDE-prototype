@@ -102,6 +102,19 @@
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/isInTripTv"
                 app:layout_constraintTop_toTopOf="@+id/isInTripTv" />
+
+            <Button
+                android:id="@+id/openProfileInfoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_button_color"
+                android:fontFamily="@font/cairo_bold"
+                android:text="Open your profile info"
+                android:textColor="@color/text_color01"
+                app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/isInTripTv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

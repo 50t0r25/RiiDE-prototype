@@ -81,44 +81,57 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         var isEditing = false
         editSaveButton.setOnClickListener {
             if (!isEditing) {
+
                 isEditing = true
                 infoScrollView.visibility = View.GONE
                 infoTextField.visibility = View.VISIBLE
                 if ((activity as MainActivity).filledInfo) infoEditText.setText(infoTv.text)
                 editSaveButton.text = "Save"
                 cancelEditButton.visibility = View.VISIBLE
+
             } else {
 
                 val newInfo = infoEditText.text!!.toString().trim()
-                val newData = hashMapOf(
-                    "info" to newInfo,
-                    "filledInfo" to true
-                )
-
-                if ((activity as MainActivity).isOnline()) {
-
-                    (activity as MainActivity).createLoadingDialog()
-
-                    db.collection("users").document(auth.currentUser!!.uid)
-                        .set(newData, SetOptions.merge())
-                        .addOnSuccessListener {
-                            (activity as MainActivity).filledInfo = true
-                            isEditing = false
-                            infoTextField.visibility = View.GONE
-                            infoScrollView.visibility = View.VISIBLE
-                            infoTv.text = newInfo
-                            editSaveButton.text = "Edit"
-                            cancelEditButton.visibility = View.GONE
-
-                            (activity as MainActivity).dismissLoadingDialog()
-
-                        }
-                } else {
+                if (newInfo.length < 10) {
 
                     Toast.makeText(context,
-                        "Cannot connect to the internet, please check your network",
+                        "Please fill the field correctly",
                         Toast.LENGTH_SHORT).show()
+
+                } else {
+
+                    val newData = hashMapOf(
+                        "info" to newInfo,
+                        "filledInfo" to true
+                    )
+
+                    if ((activity as MainActivity).isOnline()) {
+
+                        (activity as MainActivity).createLoadingDialog()
+
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .set(newData, SetOptions.merge())
+                            .addOnSuccessListener {
+                                (activity as MainActivity).filledInfo = true
+                                isEditing = false
+                                infoTextField.visibility = View.GONE
+                                infoScrollView.visibility = View.VISIBLE
+                                infoTv.text = newInfo
+                                editSaveButton.text = "Edit"
+                                cancelEditButton.visibility = View.GONE
+
+                                (activity as MainActivity).dismissLoadingDialog()
+
+                            }
+                    } else {
+
+                        Toast.makeText(context,
+                            "Cannot connect to the internet, please check your network",
+                            Toast.LENGTH_SHORT).show()
+                    }
+
                 }
+
             }
 
         }
@@ -143,7 +156,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                 val filledInfo = user.data!!["filledInfo"].toString().toBoolean()
                 username.text = localUsername
                 email.text = user.data!!["email"].toString()
-                infoTitle.text = localUsername.plus("'s info:")
+                infoTitle.text = localUsername.plus("'s contact info:")
 
                 if (filledInfo) {
                     infoTv.text = user.data!!["info"].toString()

@@ -133,40 +133,52 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                     if ((activity as MainActivity).isOnline()) {
                         // User has network access
 
-                        (activity as MainActivity).createLoadingDialog()
+                        if (!(activity as MainActivity).filledInfo) {
+                            // Contact info missing
 
-                        // Add trip hashMap to the database as a document with a random ID
-                        // Set isInTrip user field to true
-                        // Add the new trip's ID as "currentTripID" in user document
-                        db.collection("trips").add(trip)
-                            .addOnSuccessListener { newTrip ->
-                                val userDocument = db.collection("users").document(auth.currentUser!!.uid)
-                                userDocument.update("isInTrip", true)
-                                    .addOnSuccessListener {
-                                        userDocument.set(hashMapOf("currentTripID" to newTrip.id), SetOptions.merge())
-                                            .addOnSuccessListener {
-                                                (activity as MainActivity).dismissLoadingDialog()
-                                                (activity as MainActivity).isInTrip = true
-                                                (activity as MainActivity).currentTripID = newTrip.id
-                                                parentFragmentManager.popBackStack()
+                            Toast.makeText(context,
+                                "You need to fill in your contact info in your profile first",
+                                Toast.LENGTH_SHORT).show()
 
-                                                Toast.makeText(
-                                                    context,
-                                                    "Trip created successfully",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                    }
-                            }
-                            .addOnFailureListener {
-                                (activity as MainActivity).dismissLoadingDialog()
+                        } else {
+                            // User has filled in his info
 
-                                Toast.makeText(
-                                    context,
-                                    it.localizedMessage,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            (activity as MainActivity).createLoadingDialog()
+
+                            // Add trip hashMap to the database as a document with a random ID
+                            // Set isInTrip user field to true
+                            // Add the new trip's ID as "currentTripID" in user document
+                            db.collection("trips").add(trip)
+                                .addOnSuccessListener { newTrip ->
+                                    val userDocument = db.collection("users").document(auth.currentUser!!.uid)
+                                    userDocument.update("isInTrip", true)
+                                        .addOnSuccessListener {
+                                            userDocument.set(hashMapOf("currentTripID" to newTrip.id), SetOptions.merge())
+                                                .addOnSuccessListener {
+                                                    (activity as MainActivity).dismissLoadingDialog()
+                                                    (activity as MainActivity).isInTrip = true
+                                                    (activity as MainActivity).currentTripID = newTrip.id
+                                                    parentFragmentManager.popBackStack()
+
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Trip created successfully",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                        }
+                                }
+                                .addOnFailureListener {
+                                    (activity as MainActivity).dismissLoadingDialog()
+
+                                    Toast.makeText(
+                                        context,
+                                        it.localizedMessage,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                        }
                     } else {
                         // No network access
                         Toast.makeText(context,

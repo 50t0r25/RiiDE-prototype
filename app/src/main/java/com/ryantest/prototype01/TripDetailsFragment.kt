@@ -146,56 +146,69 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                     if ((activity as MainActivity).isOnline()) {
                         // User has internet
 
-                        (activity as MainActivity).createLoadingDialog()
+                        // Check if user has filled in his contact info
+                        if (!(activity as MainActivity).filledInfo) {
+                            // Contact info missing
 
-                        // New data to put in user document
-                        val newUserData = hashMapOf(
-                            "isInTrip" to true,
-                            "currentTripID" to tripID
-                        )
+                            Toast.makeText(context,
+                                "You need to fill in your contact info in your profile first",
+                                Toast.LENGTH_SHORT).show()
 
-                        // Add the new data to user document
-                        db.collection("users").document(auth.currentUser!!.uid).set(newUserData, SetOptions.merge())
-                            .addOnSuccessListener {
+                        } else {
+                            // User has filled in his info
 
-                                // Cache the new variables
-                                (activity as MainActivity).isInTrip = true
-                                (activity as MainActivity).currentTripID = tripID
+                            (activity as MainActivity).createLoadingDialog()
 
-                                // Update the number of seats left in the trip document
-                                db.collection("trips").document(tripID).update("seatsLeft", seatsLeft - 1)
-                                    .addOnSuccessListener {
+                            // New data to put in user document
+                            val newUserData = hashMapOf(
+                                "isInTrip" to true,
+                                "currentTripID" to tripID
+                            )
 
-                                        // Add the user as a passenger in the "passengers" collection inside the trip document
-                                        db.collection("trips").document(tripID)
-                                            .collection("passengers").document(auth.currentUser!!.uid).set(
-                                                hashMapOf("username" to (activity as MainActivity).username)
-                                            )
-                                            .addOnSuccessListener {
-                                                // Everything successful
+                            // Add the new data to user document
+                            db.collection("users").document(auth.currentUser!!.uid).set(newUserData, SetOptions.merge())
+                                .addOnSuccessListener {
 
-                                                (activity as MainActivity).dismissLoadingDialog()
+                                    // Cache the new variables
+                                    (activity as MainActivity).isInTrip = true
+                                    (activity as MainActivity).currentTripID = tripID
 
-                                                Toast.makeText(context,
-                                                    "Trip joined successfully",
-                                                    Toast.LENGTH_SHORT).show()
+                                    // Update the number of seats left in the trip document
+                                    db.collection("trips").document(tripID).update("seatsLeft", seatsLeft - 1)
+                                        .addOnSuccessListener {
 
-                                                (activity as MainActivity).navBar.selectedItemId = R.id.page_profile
-                                            }
-                                    }
-                            }
-                            .addOnFailureListener {
-                                // Could not set new user data
+                                            // Add the user as a passenger in the "passengers" collection inside the trip document
+                                            db.collection("trips").document(tripID)
+                                                .collection("passengers").document(auth.currentUser!!.uid).set(
+                                                    hashMapOf("username" to (activity as MainActivity).username)
+                                                )
+                                                .addOnSuccessListener {
+                                                    // Everything successful
 
-                                (activity as MainActivity).dismissLoadingDialog()
+                                                    (activity as MainActivity).dismissLoadingDialog()
 
-                                Toast.makeText(
-                                    context,
-                                    it.localizedMessage,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                                                    Toast.makeText(context,
+                                                        "Trip joined successfully",
+                                                        Toast.LENGTH_SHORT).show()
 
+                                                    (activity as MainActivity).navBar.selectedItemId = R.id.page_profile
+                                                }
+                                        }
+                                }
+                                .addOnFailureListener {
+                                    // Could not set new user data
+
+                                    (activity as MainActivity).dismissLoadingDialog()
+
+                                    Toast.makeText(
+                                        context,
+                                        it.localizedMessage,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+
+                        }
 
                     } else {
                         // No network access
