@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -105,31 +106,44 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                         "filledInfo" to true
                     )
 
-                    if ((activity as MainActivity).isOnline()) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("Caution")
+                        .setMessage("Your contact info has to be accessible by other users, filling it with anything else will get you banned.")
+                        .setNeutralButton("Cancel") { dialog, _ ->
+                            // User clicks cancel
 
-                        (activity as MainActivity).createLoadingDialog()
+                            dialog.dismiss()
+                        }
+                        .setPositiveButton("Confirm") { dialog, _ ->
 
-                        db.collection("users").document(auth.currentUser!!.uid)
-                            .set(newData, SetOptions.merge())
-                            .addOnSuccessListener {
-                                (activity as MainActivity).filledInfo = true
-                                isEditing = false
-                                infoTextField.visibility = View.GONE
-                                infoScrollView.visibility = View.VISIBLE
-                                infoTv.text = newInfo
-                                editSaveButton.text = "Edit"
-                                cancelEditButton.visibility = View.GONE
+                            dialog.dismiss()
 
-                                (activity as MainActivity).dismissLoadingDialog()
+                            if ((activity as MainActivity).isOnline()) {
 
+                                (activity as MainActivity).createLoadingDialog()
+
+                                db.collection("users").document(auth.currentUser!!.uid)
+                                    .set(newData, SetOptions.merge())
+                                    .addOnSuccessListener {
+                                        (activity as MainActivity).filledInfo = true
+                                        isEditing = false
+                                        infoTextField.visibility = View.GONE
+                                        infoScrollView.visibility = View.VISIBLE
+                                        infoTv.text = newInfo
+                                        editSaveButton.text = "Edit"
+                                        cancelEditButton.visibility = View.GONE
+
+                                        (activity as MainActivity).dismissLoadingDialog()
+
+                                    }
+                            } else {
+
+                                Toast.makeText(context,
+                                    "Cannot connect to the internet, please check your network",
+                                    Toast.LENGTH_SHORT).show()
                             }
-                    } else {
-
-                        Toast.makeText(context,
-                            "Cannot connect to the internet, please check your network",
-                            Toast.LENGTH_SHORT).show()
-                    }
-
+                        }
+                        .show()
                 }
 
             }
@@ -148,14 +162,70 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
             parentFragmentManager.popBackStack()
         }
 
+        submitRatingButton.setOnClickListener {
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Confirm")
+                .setMessage("Are you sure you want to rate this user ${ratingBar.rating}/5 stars?")
+                .setNeutralButton("Cancel") { dialog, _ ->
+                    // User clicks cancel
+
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Rate") { dialog, _ ->
+
+                    dialog.dismiss()
+
+                    if ((activity as MainActivity).isOnline()) {
+
+                        (activity as MainActivity).createLoadingDialog()
+
+                        db.collection("users").document(userID)
+                            .collection("ratings").document(auth.currentUser!!.uid)
+                            .set(hashMapOf("rating" to ratingBar.rating))
+                            .addOnSuccessListener {
+
+                                db.collection("users").document(userID).collection("ratings").get()
+                                    .addOnSuccessListener { ratings ->
+
+                                        var newRating = 0f
+                                        for (rating in ratings) {
+                                            newRating += rating.data["rating"].toString().toFloat()
+                                        }
+
+                                        newRating /= ratings.size()
+
+                                        db.collection("users").document(userID)
+                                            .set(hashMapOf("rating" to newRating), SetOptions.merge())
+                                            .addOnSuccessListener {
+
+                                                ratingTv.text = newRating.toString().plus("/5.0 Stars")
+
+                                                (activity as MainActivity).dismissLoadingDialog()
+                                            }
+                                    }
+
+                            }
+
+                    } else {
+
+                        Toast.makeText(context,
+                            "Cannot connect to the internet, please check your network",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .show()
+
+        }
+
         (activity as MainActivity).createLoadingDialog()
 
         db.collection("users").document(userID).get()
             .addOnSuccessListener { user ->
-                val localUsername = user.data!!["username"].toString()
+                val localUsername = "Username: ".plus(user.data!!["username"].toString())
                 val filledInfo = user.data!!["filledInfo"].toString().toBoolean()
                 username.text = localUsername
-                email.text = user.data!!["email"].toString()
+                email.text = "Email: ".plus(user.data!!["email"].toString())
                 infoTitle.text = localUsername.plus("'s contact info:")
 
                 if (filledInfo) {
@@ -164,7 +234,36 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                     infoTv.text = "No user info provided yet."
                 }
 
-                (activity as MainActivity).dismissLoadingDialog()
+                if (user.data!!["rating"] == null) {
+                    ratingTv.text = "Not rated yet"
+
+                    (activity as MainActivity).dismissLoadingDialog()
+
+                } else {
+
+                    ratingTv.text = user.data!!["rating"].toString().plus("/5.0 Stars")
+
+                    if (isCurrentUserProfile) {
+
+                        ratingBar.rating = user.data!!["rating"].toString().toFloat()
+
+                        (activity as MainActivity).dismissLoadingDialog()
+
+                    } else {
+
+                        db.collection("users").document(userID)
+                            .collection("ratings").document(auth.currentUser!!.uid).get()
+                            .addOnSuccessListener { rating ->
+
+                                if (rating.exists()) {
+                                    ratingBar.rating = rating.data!!["rating"]?.toString()!!.toFloat()
+                                }
+
+                                (activity as MainActivity).dismissLoadingDialog()
+                            }
+
+                    }
+                }
             }
     }
 }
