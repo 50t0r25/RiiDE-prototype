@@ -59,6 +59,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         submitRatingButton = requireView().findViewById(R.id.userInfoSubmitRatingButton)
         cancelEditButton = requireView().findViewById(R.id.userInfoCancelEditButton)
 
+        // Check if this profile is the current user's
         var isCurrentUserProfile = false
         if ((activity as MainActivity).isLoggedIn) {
             if (auth.currentUser!!.uid == userID) isCurrentUserProfile = true
@@ -66,6 +67,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
             submitRatingButton.visibility = View.GONE
         }
 
+        // Don't let user rating himself if it's his profile
         if (isCurrentUserProfile) {
 
             submitRatingButton.visibility = View.GONE
@@ -79,6 +81,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
         }
 
+        // editSave Button let's the user edit his contact info, then save it
         var isEditing = false
         editSaveButton.setOnClickListener {
             if (!isEditing) {
@@ -86,6 +89,8 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                 isEditing = true
                 infoScrollView.visibility = View.GONE
                 infoTextField.visibility = View.VISIBLE
+
+                // If user hasn't filled his info, it won't pass the predefined text to the text field
                 if ((activity as MainActivity).filledInfo) infoEditText.setText(infoTv.text)
                 editSaveButton.text = "Save"
                 cancelEditButton.visibility = View.VISIBLE
@@ -101,6 +106,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
                 } else {
 
+                    // Set user as "has filled his info", and add that info
                     val newData = hashMapOf(
                         "info" to newInfo,
                         "filledInfo" to true
@@ -150,6 +156,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
         }
 
+        // Button cancels the editing of contact info
         cancelEditButton.setOnClickListener {
             isEditing = false
             infoTextField.visibility = View.GONE
@@ -162,11 +169,13 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
             parentFragmentManager.popBackStack()
         }
 
+        // Gets the rating from the rating bar then adds it to profile owner's ratings
+        // Calculates the new average rating of all available ratings and sets it in the database
         submitRatingButton.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Confirm")
-                .setMessage("Are you sure you want to rate this user ${ratingBar.rating}/5 stars?")
+                .setMessage("Are you sure you want to rate this user ${ratingBar.rating}/5.0 stars?")
                 .setNeutralButton("Cancel") { dialog, _ ->
                     // User clicks cancel
 
@@ -180,14 +189,17 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
                         (activity as MainActivity).createLoadingDialog()
 
+                        // Add this new rating
                         db.collection("users").document(userID)
                             .collection("ratings").document(auth.currentUser!!.uid)
                             .set(hashMapOf("rating" to ratingBar.rating))
                             .addOnSuccessListener {
 
+                                // Get all ratings
                                 db.collection("users").document(userID).collection("ratings").get()
                                     .addOnSuccessListener { ratings ->
 
+                                        // Calculate new average rating
                                         var newRating = 0f
                                         for (rating in ratings) {
                                             newRating += rating.data["rating"].toString().toFloat()
@@ -195,6 +207,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
                                         newRating /= ratings.size()
 
+                                        // Sets that new average rating
                                         db.collection("users").document(userID)
                                             .set(hashMapOf("rating" to newRating), SetOptions.merge())
                                             .addOnSuccessListener {
@@ -208,6 +221,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                             }
 
                     } else {
+                        // No internet
 
                         Toast.makeText(context,
                             "Cannot connect to the internet, please check your network",
@@ -220,6 +234,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
         (activity as MainActivity).createLoadingDialog()
 
+        // Fetching all user data and setting them in the fields
         db.collection("users").document(userID).get()
             .addOnSuccessListener { user ->
                 val localUsername = "Username: ".plus(user.data!!["username"].toString())
@@ -228,13 +243,17 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                 email.text = "Email: ".plus(user.data!!["email"].toString())
                 infoTitle.text = localUsername.plus("'s contact info:")
 
+                // If user has filled his info, display it, else display predefined text
                 if (filledInfo) {
                     infoTv.text = user.data!!["info"].toString()
                 } else {
                     infoTv.text = "No user info provided yet."
                 }
 
+                // Setting the rating has 3 different possibilities
                 if (user.data!!["rating"] == null) {
+                    // 1: No rating, leave rating bar empty and display this text
+
                     ratingTv.text = "Not rated yet"
 
                     (activity as MainActivity).dismissLoadingDialog()
@@ -244,12 +263,17 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                     ratingTv.text = user.data!!["rating"].toString().plus("/5.0 Stars")
 
                     if (isCurrentUserProfile) {
+                        // 2: User has been rated and this is his profile
+                        // The rating bar will display the average rating & the user can't change it
 
                         ratingBar.rating = user.data!!["rating"].toString().toFloat()
 
                         (activity as MainActivity).dismissLoadingDialog()
 
                     } else {
+                        // 3: User has been rated and this isn't his profile
+                        // Get this current user's rating of the profile's owner and display it in the rating bar, user can modify it and submit a new rating
+                        // If current user hasn't rated the profile's owner, rating bar will be left empty
 
                         db.collection("users").document(userID)
                             .collection("ratings").document(auth.currentUser!!.uid).get()
