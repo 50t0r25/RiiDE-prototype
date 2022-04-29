@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fragmentProfile : Fragment
     private var fragmentHome = HomeFragment()
     private lateinit var loading: AlertDialog
-    private lateinit var loadingBuilder : MaterialAlertDialogBuilder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,10 +104,10 @@ class MainActivity : AppCompatActivity() {
         }
 
     fun createLoadingDialog() {
-        loadingBuilder = MaterialAlertDialogBuilder(this)
-            .setMessage("Please wait...")
+        loading = MaterialAlertDialogBuilder(this)
+            .setView(this.layoutInflater.inflate(R.layout.dialog_loading, null))
             .setCancelable(false)
-        loading = loadingBuilder.create()
+            .create()
         loading.show()
     }
 
