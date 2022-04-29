@@ -26,6 +26,7 @@ local.properties
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
 .idea/deploymentTargetDropDown.xml
+.idea/assetWizardSettings.xml
 *.iml
 
 # OS-specific files

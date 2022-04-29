@@ -20,73 +20,47 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:padding="20dp">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/welcomeProfileTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
                 android:fontFamily="@font/cairo_bold"
-                android:text="Logged in as:"
+                android:text="Welcome to RiiDE, USERNAME !"
+                android:textAlignment="center"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/userEmailTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/cairo_bold"
-                android:text="USER_EMAIL"
-                android:textAlignment="center"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-            <TextView
-                android:id="@+id/userNameTv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/cairo_bold"
-                android:text="USER_NAME"
-                android:textAlignment="center"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userEmailTv" />
-
             <Button
                 android:id="@+id/logoutButton"
                 style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:text="Logout"
                 android:textColor="@color/that_red"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tripDetailsButton"
-                app:layout_constraintVertical_bias="0.85"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/helpButton"
                 app:strokeColor="@color/that_red" />
 
             <TextView
                 android:id="@+id/isInTripTv"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="You are currenly not in a trip"
                 android:textColor="@color/text_color01"
                 android:textSize="17sp"
-                app:layout_constraintEnd_toStartOf="@+id/tripDetailsButton"
-                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginBottom="40dp"
                 app:layout_constraintHorizontal_weight="2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userNameTv" />
+                app:layout_constraintBottom_toTopOf="@+id/openProfileInfoButton"
+                app:layout_constraintEnd_toStartOf="@+id/tripDetailsButton"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/tripDetailsButton"
@@ -98,7 +72,6 @@
                 android:textColor="@color/text_color01"
                 app:layout_constraintBottom_toBottomOf="@+id/isInTripTv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/isInTripTv"
                 app:layout_constraintTop_toTopOf="@+id/isInTripTv" />
@@ -107,14 +80,60 @@
                 android:id="@+id/openProfileInfoButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
                 android:backgroundTint="@color/main_button_color"
                 android:fontFamily="@font/cairo_bold"
                 android:text="Open your profile info"
                 android:textColor="@color/text_color01"
-                app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+                app:layout_constraintBottom_toTopOf="@+id/githubButton"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/helpButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:backgroundTint="@color/main_button_color"
+                android:fontFamily="@font/cairo_bold"
+                android:text="Help"
+                android:textColor="@color/text_color01"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/logoutButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/githubButton"
+                style="@style/Widget.Material3.Button.Icon"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:backgroundTint="@color/main_button_color"
+                android:fontFamily="@font/cairo_bold"
+                android:text="Github"
+                android:textColor="@color/text_color01"
+                app:icon="@drawable/ic_github"
+                app:iconSize="28dp"
+                app:iconTint="@color/text_color01"
+                app:layout_constraintBottom_toTopOf="@+id/logoutButton"
+                app:layout_constraintEnd_toEndOf="@+id/logoutButton"
+                app:layout_constraintStart_toStartOf="@+id/logoutButton" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/cairo_medium"
+                android:text="Find yourself a trip to any given destination, or create your own, and enjoy the company of cheerful passengers!"
+                android:textAlignment="center"
+                android:textColor="@color/secondary_text"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/isInTripTv" />
+                app:layout_constraintTop_toBottomOf="@+id/welcomeProfileTv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
