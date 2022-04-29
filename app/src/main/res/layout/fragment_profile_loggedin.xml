@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/cairo_medium"
-                android:text="Find yourself a trip to any given destination, or create your own, and enjoy the company of cheerful passengers!"
+                android:text="Find yourself a trip to any given destination, or create your own and enjoy the company of cheerful passengers!"
                 android:textAlignment="center"
                 android:textColor="@color/secondary_text"
                 android:textSize="17sp"

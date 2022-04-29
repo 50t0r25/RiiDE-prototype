@@ -107,7 +107,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
 
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle("What is RiiDE?")
-                .setMessage("RiiDE is an algerian local carpooling app, it provides you the ability to create and share, or join trips.\nTo start using it, either search for a trip, join it then contact the driver via the info on their profile, or make your own trip and wait for people to join it.\n\nThis app was made as an end of cycle project for our bachelor's CS degree.\n\nGithub: @50t0r25 @windyznuts")
+                .setMessage("RiiDE is an algerian local carpooling app, it provides you the ability to create and share, or join trips.\nTo start using it, first fill in the \"contact info\" field in your profile, now you can either search for a trip, join it then contact the driver via the info on their profile, or make your own trip and wait for people to join it.\nNote: You can only be in one trip at a time.\n\nThis app was made as an end of cycle project for our bachelor's CS degree.\n\nGithub: @50t0r25 @windyznuts")
                 .setPositiveButton("Close", null)
                 .show()
         }
