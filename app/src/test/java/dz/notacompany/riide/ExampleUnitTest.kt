@@ -1,4 +1,4 @@
-package com.ryantest.prototype01
+package dz.notacompany.riide
 
 import org.junit.Test
 

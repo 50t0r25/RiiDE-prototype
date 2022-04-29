@@ -1,4 +1,4 @@
-package com.ryantest.prototype01
+package dz.notacompany.riide
 
 import android.os.Bundle
 import android.view.View
@@ -83,7 +83,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                                             // Refreshes the activity to logged in state and sets the new fragment
                                             (activity as MainActivity).refreshMainActivity()
-                                            (activity as MainActivity).navBar.selectedItemId = R.id.page_profile
+                                            (activity as MainActivity).navBar.selectedItemId =
+                                                R.id.page_profile
 
                                             (activity as MainActivity).dismissLoadingDialog()
                                         }
@@ -100,7 +101,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                                     // Refreshes the main activity to fetch user data, and set the new fragment
                                     (activity as MainActivity).refreshMainActivity()
-                                    (activity as MainActivity).setCurrentFragment(ProfileLoggedinFragment())
+                                    (activity as MainActivity).setCurrentFragment(
+                                        ProfileLoggedinFragment()
+                                    )
 
                                     (activity as MainActivity).dismissLoadingDialog()
                                 }

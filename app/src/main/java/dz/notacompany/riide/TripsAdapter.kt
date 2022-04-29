@@ -1,12 +1,12 @@
-package com.ryantest.prototype01
+package dz.notacompany.riide
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ryantest.prototype01.databinding.ItemTripBinding
+import dz.notacompany.riide.databinding.ItemTripBinding
 
-class TripsAdapter(var tripItems: List<TripItem>,private val adapterFunction: (position: Int, partToRun: Int) -> Boolean): RecyclerView.Adapter<TripsAdapter.TripsViewHolder>() {
+class TripsAdapter(var tripItems: List<TripItem>, private val adapterFunction: (position: Int, partToRun: Int) -> Boolean): RecyclerView.Adapter<TripsAdapter.TripsViewHolder>() {
 
     inner class TripsViewHolder(val binding: ItemTripBinding) : RecyclerView.ViewHolder(binding.root)
 

@@ -1,4 +1,4 @@
-package com.ryantest.prototype01
+package dz.notacompany.riide
 
 import android.os.Bundle
 import android.util.Log

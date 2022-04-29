@@ -1,13 +1,13 @@
-package com.ryantest.prototype01
+package dz.notacompany.riide
 
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ryantest.prototype01.databinding.ItemPassengerBinding
+import dz.notacompany.riide.databinding.ItemPassengerBinding
 
-class PassengersAdapter(var passengerItems: List<PassengerItem>,private val onItemClicked: (position: Int) -> Unit): RecyclerView.Adapter<PassengersAdapter.PassengersViewHolder>() {
+class PassengersAdapter(var passengerItems: List<PassengerItem>, private val onItemClicked: (position: Int) -> Unit): RecyclerView.Adapter<PassengersAdapter.PassengersViewHolder>() {
 
     inner class PassengersViewHolder(val binding: ItemPassengerBinding) : RecyclerView.ViewHolder(binding.root)
 

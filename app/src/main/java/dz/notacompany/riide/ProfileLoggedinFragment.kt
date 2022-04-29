@@ -1,4 +1,4 @@
-package com.ryantest.prototype01
+package dz.notacompany.riide
 
 import android.content.Intent
 import android.net.Uri

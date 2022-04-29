@@ -1,4 +1,4 @@
-package com.ryantest.prototype01
+package dz.notacompany.riide
 
 import android.os.Bundle
 import android.text.SpannableString
@@ -191,7 +191,8 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                                                         "Trip joined successfully",
                                                         Toast.LENGTH_SHORT).show()
 
-                                                    (activity as MainActivity).navBar.selectedItemId = R.id.page_profile
+                                                    (activity as MainActivity).navBar.selectedItemId =
+                                                        R.id.page_profile
                                                 }
                                         }
                                 }
