@@ -237,9 +237,9 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         // Fetching all user data and setting them in the fields
         db.collection("users").document(userID).get()
             .addOnSuccessListener { user ->
-                val localUsername = "Username: ".plus(user.data!!["username"].toString())
+                val localUsername = user.data!!["username"].toString()
                 val filledInfo = user.data!!["filledInfo"].toString().toBoolean()
-                username.text = localUsername
+                username.text = "Username: ".plus(localUsername)
                 email.text = "Email: ".plus(user.data!!["email"].toString())
                 infoTitle.text = localUsername.plus("'s contact info:")
 
