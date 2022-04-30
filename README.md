@@ -1,7 +1,7 @@
 # RiiDE
 RiiDE is a carpooling app that lets users search through, join or create trips to any given destination, and also helps managing the pricing, passengers, contact info and timings.
 
-This app was roughly developed in a month from week-end to week-end as an end of cycle CS Bachelor's degree, so it will not get any further updates after it's done.
+This app was roughly developed in a month from week-end to week-end as an end of cycle CS Bachelor's degree project, so it will not get any further updates after it's done.
 
 **Note:** App is still under developement for the moment.
 
