@@ -1,7 +1,7 @@
 # RiiDE
 RiiDE is a carpooling app that lets users search through, join or create trips to any given destination, and also helps managing the pricing, passengers, contact info and timings.
 
-This app was roughly developed in a month from week-end to week-end as an end of cycle degree for a CS Bachelor's degree, so it will not get any further updates after it's done.
+This app was roughly developed in a month from week-end to week-end as an end of cycle CS Bachelor's degree, so it will not get any further updates after it's done.
 
 **Note:** App is still under developement for the moment.
 
@@ -26,7 +26,7 @@ This app was roughly developed in a month from week-end to week-end as an end of
 Simply cloning and building with android studio should do the trick, make sure to use the latest androidx libraries.
 
 # Hosting
-This app is hosted on a Firebase instance, uses its auth system that i slightly modified to include usernames, and the Firestore Database.
+This app is hosted on a Firebase instance, uses its auth system (that i slightly modified to include usernames), and the Firestore Database.
 
 To host it with another Firebase instance, delete `./app/google-services.json` and replace it with your own generated one, no other configurations needed other than the database rules, as the code will automatically initialize the database and no cloud functions are used.
 
