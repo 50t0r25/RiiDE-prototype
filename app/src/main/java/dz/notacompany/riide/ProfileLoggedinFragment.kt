@@ -44,7 +44,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
         isInTripTv = requireView().findViewById(R.id.isInTripTv)
         welcomeTv = requireView().findViewById(R.id.welcomeProfileTv)
 
-        welcomeTv.text = "Welcome to RiiDE, ${(activity as MainActivity).username} !"
+        welcomeTv.text = "Welcome to RiiDE,\n${(activity as MainActivity).username} !"
 
         // Display the trip user state from the cached variable
         if ((activity as MainActivity).isInTrip) {

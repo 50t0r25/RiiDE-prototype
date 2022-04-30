@@ -7,27 +7,32 @@ com_crashlytics_export_strings.xml
 # Local configuration file (sdk path, etc)
 local.properties
 
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
+
 # Gradle generated files
 .gradle/
 
 # Signing files
 .signing/
 
-# User-specific configurations
-.idea/libraries/
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/.name
-.idea/compiler.xml
-.idea/copyright/profiles_settings.xml
-.idea/encodings.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/scopes/scope_settings.xml
-.idea/vcs.xml
-.idea/deploymentTargetDropDown.xml
-.idea/assetWizardSettings.xml
+# IntelliJ
 *.iml
+.idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
+
+# Keystore files
+*.jks
+*.keystore
 
 # OS-specific files
 .DS_Store
@@ -37,3 +42,6 @@ local.properties
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Android Profiling
+*.hprof

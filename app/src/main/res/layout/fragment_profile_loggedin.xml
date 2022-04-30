@@ -27,9 +27,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
-                android:text="Welcome to RiiDE, USERNAME !"
+                android:text="Welcome to RiiDE,\nUSERNAME !"
                 android:textAlignment="center"
-                android:textSize="30sp"
+                android:textSize="28sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -56,11 +56,12 @@
                 android:text="You are currenly not in a trip"
                 android:textColor="@color/text_color01"
                 android:textSize="17sp"
-                android:layout_marginBottom="40dp"
-                app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintBottom_toTopOf="@+id/openProfileInfoButton"
                 app:layout_constraintEnd_toStartOf="@+id/tripDetailsButton"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/separator0" />
 
             <Button
                 android:id="@+id/tripDetailsButton"
@@ -80,14 +81,15 @@
                 android:id="@+id/openProfileInfoButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
                 android:backgroundTint="@color/main_button_color"
                 android:fontFamily="@font/cairo_bold"
                 android:text="Open your profile info"
                 android:textColor="@color/text_color01"
                 app:layout_constraintBottom_toTopOf="@+id/githubButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/isInTripTv" />
 
             <Button
                 android:id="@+id/helpButton"
@@ -108,7 +110,6 @@
                 style="@style/Widget.Material3.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
                 android:backgroundTint="@color/main_button_color"
                 android:fontFamily="@font/cairo_bold"
                 android:text="Github"
@@ -118,7 +119,9 @@
                 app:iconTint="@color/text_color01"
                 app:layout_constraintBottom_toTopOf="@+id/logoutButton"
                 app:layout_constraintEnd_toEndOf="@+id/logoutButton"
-                app:layout_constraintStart_toStartOf="@+id/logoutButton" />
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/logoutButton"
+                app:layout_constraintTop_toBottomOf="@+id/openProfileInfoButton" />
 
             <TextView
                 android:id="@+id/textView"
@@ -129,11 +132,23 @@
                 android:text="Find yourself a trip to any given destination, or create your own and enjoy the company of cheerful passengers!"
                 android:textAlignment="center"
                 android:textColor="@color/secondary_text"
-                android:textSize="17sp"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@+id/separator0"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/welcomeProfileTv" />
+
+            <TextView
+                android:id="@+id/separator0"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text=""
+                app:layout_constraintBottom_toTopOf="@+id/isInTripTv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

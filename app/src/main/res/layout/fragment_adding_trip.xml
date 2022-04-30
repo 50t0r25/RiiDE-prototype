@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -19,8 +20,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/textView2"
@@ -29,9 +29,7 @@
                 android:fontFamily="@font/cairo_bold"
                 android:text="Create a trip:"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/fromTv"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -109,8 +107,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cairo_bold"
                     android:text="Departure date and time:"
-                    android:textSize="18sp"
                     android:textColor="@color/text_color01"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -153,14 +151,14 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
                 android:text="Price per person: "
-                android:textSize="18sp"
                 android:textColor="@color/text_color01"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
                 app:layout_constraintEnd_toStartOf="@+id/priceInputTf"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayout4" />
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/priceInputTf"
@@ -179,7 +177,7 @@
                     android:id="@+id/priceInputEf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -199,8 +197,8 @@
                     android:fontFamily="@font/cairo_bold"
                     android:paddingBottom="10dp"
                     android:text="Max number of passengers:"
-                    android:textSize="18sp"
                     android:textColor="@color/text_color01"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -250,9 +248,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <Button
                     android:id="@+id/cTripCancelButton"
