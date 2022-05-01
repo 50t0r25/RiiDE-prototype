@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Prototype01" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="Theme.RiiDE" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#AA65FF</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
