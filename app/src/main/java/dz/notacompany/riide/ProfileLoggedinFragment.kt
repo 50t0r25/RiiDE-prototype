@@ -29,6 +29,8 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
 
     private lateinit var isInTripTv : TextView
     private lateinit var welcomeTv : TextView
+    private lateinit var introTextTv : TextView
+    private lateinit var separator0 : TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,6 +45,20 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
         helpButton = requireView().findViewById(R.id.helpButton)
         isInTripTv = requireView().findViewById(R.id.isInTripTv)
         welcomeTv = requireView().findViewById(R.id.welcomeProfileTv)
+        separator0 = requireView().findViewById(R.id.separator0)
+        introTextTv = requireView().findViewById(R.id.profileIntroTextTv)
+
+        // ----- Rescale some stuff if screen is too short --------
+        val displayMetrics = resources.displayMetrics
+        val displayHeight = displayMetrics.heightPixels / displayMetrics.density
+        // val displayWidth = displayMetrics.widthPixels / displayMetrics.density
+
+        if (displayHeight < (activity as MainActivity).minimumHeightDensity) {
+            separator0.visibility = View.GONE
+            welcomeTv.textSize = 24f
+            introTextTv.textSize = 15f
+        }
+        // ---------------------------------------------------------
 
         welcomeTv.text = "Welcome to RiiDE,\n${(activity as MainActivity).username} !"
 

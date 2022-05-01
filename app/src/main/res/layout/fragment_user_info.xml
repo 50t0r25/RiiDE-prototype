@@ -20,7 +20,7 @@
             android:padding="20dp">
 
             <TextView
-                android:id="@+id/textView7"
+                android:id="@+id/userInfoTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
@@ -35,10 +35,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/itemTripCard"
+                app:layout_constraintBottom_toTopOf="@+id/userInfoCard"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView7">
+                app:layout_constraintTop_toBottomOf="@+id/userInfoTitle">
 
 
                 <TextView
@@ -93,7 +93,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/userInfoBackButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/itemTripCard">
+                app:layout_constraintTop_toBottomOf="@+id/userInfoCard">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,7 +130,7 @@
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/itemTripCard"
+                android:id="@+id/userInfoCard"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 app:cardBackgroundColor="@color/card_bg"

@@ -44,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     private var fragmentHome = HomeFragment()
     private lateinit var loading: AlertDialog
 
+    val minimumHeightDensity = 700
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

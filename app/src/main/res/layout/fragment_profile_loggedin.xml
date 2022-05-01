@@ -124,7 +124,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/openProfileInfoButton" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/profileIntroTextTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -132,23 +132,23 @@
                 android:text="Find yourself a trip to any given destination, or create your own and enjoy the company of cheerful passengers!"
                 android:textAlignment="center"
                 android:textColor="@color/secondary_text"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 app:layout_constraintBottom_toTopOf="@+id/separator0"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/welcomeProfileTv" />
 
             <TextView
                 android:id="@+id/separator0"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="100dp"
                 android:text=""
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/isInTripTv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
+                app:layout_constraintTop_toBottomOf="@+id/profileIntroTextTv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

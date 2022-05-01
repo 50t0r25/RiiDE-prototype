@@ -26,6 +26,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
     private lateinit var infoTitle : TextView
     private lateinit var infoTv : TextView
     private lateinit var ratingTv : TextView
+    private lateinit var bigTitleTv : TextView
     private lateinit var infoTextField : TextInputLayout
     private lateinit var infoEditText : TextInputEditText
 
@@ -49,6 +50,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         infoTitle = requireView().findViewById(R.id.userInfoSmallTitleTv)
         infoTv = requireView().findViewById(R.id.userInfoTv)
         ratingTv = requireView().findViewById(R.id.userCurrentRatingTv)
+        bigTitleTv = requireView().findViewById(R.id.userInfoTitle)
         ratingBar = requireView().findViewById(R.id.userInfoRatingBar)
         infoTextField = requireView().findViewById(R.id.userInfoTextField)
         infoEditText = requireView().findViewById(R.id.newInfoEt)
@@ -58,6 +60,17 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         editSaveButton = requireView().findViewById(R.id.editSaveInfoButton)
         submitRatingButton = requireView().findViewById(R.id.userInfoSubmitRatingButton)
         cancelEditButton = requireView().findViewById(R.id.userInfoCancelEditButton)
+
+        // ----- Rescale some stuff if screen is too short --------
+        val displayMetrics = resources.displayMetrics
+        val displayHeight = displayMetrics.heightPixels / displayMetrics.density
+        // val displayWidth = displayMetrics.widthPixels / displayMetrics.density
+
+        if (displayHeight < (activity as MainActivity).minimumHeightDensity) {
+            bigTitleTv.textSize = 25f
+            username.textSize = 22f
+        }
+        // ---------------------------------------------------------
 
         // Check if this profile is the current user's
         var isCurrentUserProfile = false
@@ -240,7 +253,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                 val localUsername = user.data!!["username"].toString()
                 val filledInfo = user.data!!["filledInfo"].toString().toBoolean()
                 username.text = "Username: ".plus(localUsername)
-                email.text = "Email: ".plus(user.data!!["email"].toString())
+                email.text = user.data!!["email"].toString()
                 infoTitle.text = localUsername.plus("'s contact info:")
 
                 // If user has filled his info, display it, else display predefined text
