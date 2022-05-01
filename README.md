@@ -3,12 +3,12 @@ RiiDE is a carpooling app that lets users search through, join or create trips t
 
 This app was roughly developed in a month from week-end to week-end as an end of cycle CS Bachelor's degree project, so it will not get any further updates after it's done.
 
-**Note:** App is still under developement for the moment.
+**Note:** App is still under developement for the moment, and the UI is nowhere close to being done.
 
 # Screenshots
-|Home Tab|Profile Tab|Creating Trips|
-|---|---|---|
+
 |![screenshot0](./screenshots/screenshot0.jpg)|![screenshot1](./screenshots/screenshot1.jpg)|![screenshot2](./screenshots/screenshot2.jpg)|
+|---|---|---|
 
 # Features
 ### Finished:
