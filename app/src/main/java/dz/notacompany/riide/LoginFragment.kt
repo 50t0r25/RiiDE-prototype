@@ -9,6 +9,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -53,7 +54,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
             // Check if the input is already taken as a username
             // else just log the user assuming the input is an email
-            db.collection("users").whereEqualTo("username",email).get()
+            db.collection("users").whereEqualTo("username",email).get(Source.SERVER)
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         if (document != null) {
@@ -77,7 +78,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                                 // If the username is unknown, fetch it and store it
                                 if (usernameToSave == "") {
-                                    db.collection("users").document(auth.currentUser!!.uid).get()
+                                    db.collection("users").document(auth.currentUser!!.uid).get(Source.SERVER)
                                         .addOnSuccessListener {
                                             (activity as MainActivity).username = it.data!!["username"].toString()
 

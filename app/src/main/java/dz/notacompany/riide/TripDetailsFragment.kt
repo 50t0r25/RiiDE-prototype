@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -20,6 +21,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var source: Source
 
     private lateinit var timeTv : TextView
     private lateinit var departureTv : TextView
@@ -65,7 +67,8 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
         var isDriver = false
 
         // Get the tripID that the user is currently in
-        db.collection("trips").document(tripID).get()
+        source = if ((activity as MainActivity).isOnline()) Source.DEFAULT else Source.CACHE
+        db.collection("trips").document(tripID).get(source)
             .addOnSuccessListener { trip ->
 
                 // Save the trip data to their variables
@@ -142,81 +145,62 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                 // then add user as a passenger in trip ("passengers" collection)
                 joinButton.setOnClickListener {
 
-                    // Check if user is online
-                    if ((activity as MainActivity).isOnline()) {
-                        // User has internet
-
-                        // Check if user has filled in his contact info
-                        if (!(activity as MainActivity).filledInfo) {
-                            // Contact info missing
-
-                            Toast.makeText(context,
-                                "You need to fill in your contact info in your profile first",
-                                Toast.LENGTH_SHORT).show()
-
-                        } else {
-                            // User has filled in his info
-
-                            (activity as MainActivity).createLoadingDialog()
-
-                            // New data to put in user document
-                            val newUserData = hashMapOf(
-                                "isInTrip" to true,
-                                "currentTripID" to tripID
-                            )
-
-                            // Add the new data to user document
-                            db.collection("users").document(auth.currentUser!!.uid).set(newUserData, SetOptions.merge())
-                                .addOnSuccessListener {
-
-                                    // Cache the new variables
-                                    (activity as MainActivity).isInTrip = true
-                                    (activity as MainActivity).currentTripID = tripID
-
-                                    // Update the number of seats left in the trip document
-                                    db.collection("trips").document(tripID).update("seatsLeft", seatsLeft - 1)
-                                        .addOnSuccessListener {
-
-                                            // Add the user as a passenger in the "passengers" collection inside the trip document
-                                            db.collection("trips").document(tripID)
-                                                .collection("passengers").document(auth.currentUser!!.uid).set(
-                                                    hashMapOf("username" to (activity as MainActivity).username)
-                                                )
-                                                .addOnSuccessListener {
-                                                    // Everything successful
-
-                                                    (activity as MainActivity).dismissLoadingDialog()
-
-                                                    Toast.makeText(context,
-                                                        "Trip joined successfully",
-                                                        Toast.LENGTH_SHORT).show()
-
-                                                    (activity as MainActivity).navBar.selectedItemId =
-                                                        R.id.page_profile
-                                                }
-                                        }
-                                }
-                                .addOnFailureListener {
-                                    // Could not set new user data
-
-                                    (activity as MainActivity).dismissLoadingDialog()
-
-                                    Toast.makeText(
-                                        context,
-                                        it.localizedMessage,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-
-                        }
-
-                    } else {
-                        // No network access
+                    // Check if user has filled in his contact info
+                    if (!(activity as MainActivity).filledInfo) {
+                        // Contact info missing
 
                         Toast.makeText(context,
-                            "Cannot connect to the internet, please check your network",
+                            "You need to fill in your contact info in your profile first",
                             Toast.LENGTH_SHORT).show()
+
+                    } else {
+                        // User has filled in his info
+
+                        (activity as MainActivity).createLoadingDialog()
+
+                        // New data to put in user document
+                        val newUserData = hashMapOf(
+                            "isInTrip" to true,
+                            "currentTripID" to tripID
+                        )
+
+                        db.runBatch { batch ->
+
+                            val userRef = db.collection("users").document(auth.currentUser!!.uid)
+                            val tripRef = db.collection("trips").document(tripID)
+                            val newPassengerRef = db.collection("trips").document(tripID).collection("passengers").document(auth.currentUser!!.uid)
+
+                            // Add the new data to user document
+                            batch.set(userRef, newUserData, SetOptions.merge())
+
+                            // Update the number of seats left in the trip document
+                            batch.update(tripRef, "seatsLeft", seatsLeft - 1)
+
+                            // Add the user as a passenger in the "passengers" collection inside the trip document
+                            batch.set(newPassengerRef, hashMapOf("username" to (activity as MainActivity).username))
+
+                        }.addOnCompleteListener {
+
+                            // Cache the new variables
+                            (activity as MainActivity).isInTrip = true
+                            (activity as MainActivity).currentTripID = tripID
+
+                            (activity as MainActivity).dismissLoadingDialog()
+
+                            Toast.makeText(context,
+                                "Trip joined successfully",
+                                Toast.LENGTH_SHORT).show()
+
+                            (activity as MainActivity).navBar.selectedItemId =
+                                R.id.page_profile
+
+                        }.addOnFailureListener {
+                            (activity as MainActivity).dismissLoadingDialog()
+
+                            Toast.makeText(context,
+                                it.localizedMessage,
+                                Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
 
@@ -225,55 +209,41 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                 // then remove user from the trip's "passengers" collection
                 leaveButton.setOnClickListener {
 
-                    // Check if user is online
-                    if ((activity as MainActivity).isOnline()) {
-                        // User has internet
+                    (activity as MainActivity).createLoadingDialog()
 
-                        (activity as MainActivity).createLoadingDialog()
+                    db.runBatch { batch ->
+
+                        val userRef = db.collection("users").document(auth.currentUser!!.uid)
+                        val tripRef = db.collection("trips").document(tripID)
+                        val passengerRef = db.collection("trips").document(tripID).collection("passengers").document(auth.currentUser!!.uid)
 
                         // Set user as not in a trip
-                        db.collection("users").document(auth.currentUser!!.uid).update("isInTrip", false)
-                            .addOnSuccessListener {
+                        batch.update(userRef, "isInTrip", false)
 
-                                // Cache variable
-                                (activity as MainActivity).isInTrip = false
+                        // Update the number of seats left in the trip document
+                        batch.update(tripRef, "seatsLeft", seatsLeft + 1)
 
-                                // Update the number of seats left in the trip document
-                                db.collection("trips").document(tripID).update("seatsLeft", seatsLeft + 1)
-                                    .addOnSuccessListener {
+                        /// Delete user from the passengers SubCollection
+                        batch.delete(passengerRef)
 
-                                        // Delete user from the passengers subcollection
-                                        db.collection("trips").document(tripID)
-                                            .collection("passengers").document(auth.currentUser!!.uid).delete()
-                                            .addOnSuccessListener {
-                                                // Everything successful
+                    }.addOnCompleteListener {
 
-                                                (activity as MainActivity).dismissLoadingDialog()
+                        // Cache variable
+                        (activity as MainActivity).isInTrip = false
 
-                                                Toast.makeText(context,
-                                                    "Trip left successfully",
-                                                    Toast.LENGTH_SHORT).show()
-
-                                                parentFragmentManager.popBackStack()
-                                            }
-                                    }
-                            }
-                            .addOnFailureListener {
-                                // Could not update user data
-
-                                (activity as MainActivity).dismissLoadingDialog()
-
-                                Toast.makeText(
-                                    context,
-                                    it.localizedMessage,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                    } else {
-                        // No network access
+                        (activity as MainActivity).dismissLoadingDialog()
 
                         Toast.makeText(context,
-                            "Cannot connect to the internet, please check your network",
+                            "Trip left successfully",
+                            Toast.LENGTH_SHORT).show()
+
+                        parentFragmentManager.popBackStack()
+
+                    }.addOnFailureListener {
+                        (activity as MainActivity).dismissLoadingDialog()
+
+                        Toast.makeText(context,
+                            it.localizedMessage,
                             Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -296,66 +266,55 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                             // User clicks delete
 
                             dialog.dismiss()
-                            if ((activity as MainActivity).isOnline()) {
-                                // User has network access
 
-                                (activity as MainActivity).createLoadingDialog()
+                            (activity as MainActivity).createLoadingDialog()
 
-                                // Fetch all passengers in the trip
-                                db.collection("trips").document(tripID)
-                                    .collection("passengers").get()
-                                    .addOnSuccessListener { passengers ->
+                            // Fetch all passengers in the trip
+                            db.collection("trips").document(tripID)
+                                .collection("passengers").get(Source.SERVER)
+                                .addOnSuccessListener { passengers ->
+
+                                    db.runBatch { batch ->
 
                                         // Cycle through the passengers to kick them from the trip
                                         for (passenger in passengers) {
 
                                             // Set each passenger as no longer in a trip
-                                            db.collection("users").document(passenger.id).update("isInTrip", false)
-                                                .addOnSuccessListener {
+                                            batch.update(db.collection("users").document(passenger.id), "isInTrip", false)
 
-                                                    // Delete all passenger documents from the passengers subcollection
-                                                    db.collection("trips").document(tripID)
-                                                        .collection("passengers").document(passenger.id).delete()
-                                                }
+                                            // Delete all passenger documents from the passengers SubCollection
+                                            batch.delete(db.collection("trips").document(tripID).collection("passengers").document(passenger.id))
                                         }
 
                                         // Flag driver as no longer in a trip
-                                        db.collection("users").document(driver["userID"].toString()).update("isInTrip", false)
+                                        batch.update(db.collection("users").document(driver["userID"].toString()), "isInTrip", false)
 
                                         // Delete this trip's document from the DB
-                                        db.collection("trips").document(tripID).delete()
-                                            .addOnSuccessListener {
-                                                // Everything successful
+                                        batch.delete(db.collection("trips").document(tripID))
 
-                                                (activity as MainActivity).isInTrip = false
-
-                                                (activity as MainActivity).dismissLoadingDialog()
-
-                                                Toast.makeText(context,
-                                                    "Trip deleted successfully",
-                                                    Toast.LENGTH_SHORT).show()
-
-                                                parentFragmentManager.popBackStack()
-                                            }
-                                    }
-                                    .addOnFailureListener {
-                                        // Could not fetch passengers data
+                                    }.addOnCompleteListener {
+                                        (activity as MainActivity).isInTrip = false
 
                                         (activity as MainActivity).dismissLoadingDialog()
 
-                                        Toast.makeText(
-                                            context,
-                                            it.localizedMessage,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                            } else {
-                                // No network access
+                                        Toast.makeText(context,
+                                            "Trip deleted successfully",
+                                            Toast.LENGTH_SHORT).show()
 
-                                Toast.makeText(context,
-                                    "Cannot connect to the internet, please check your network",
-                                    Toast.LENGTH_SHORT).show()
-                            }
+                                        parentFragmentManager.popBackStack()
+                                    }
+                                }
+                                .addOnFailureListener {
+                                    // Could not fetch passengers data
+
+                                    (activity as MainActivity).dismissLoadingDialog()
+
+                                    Toast.makeText(
+                                        context,
+                                        it.localizedMessage,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                         }
                         .show()
                 }

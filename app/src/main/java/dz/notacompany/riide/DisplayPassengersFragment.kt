@@ -10,16 +10,18 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-
 class DisplayPassengersFragment(private val tripID: String) : Fragment(R.layout.fragment_display_passengers) {
+
+    private lateinit var db: FirebaseFirestore
+    private lateinit var source: Source
 
     private lateinit var passengersRv : RecyclerView
     private lateinit var noPassengersFoundTv : TextView
     private lateinit var backButton : Button
-    private lateinit var db: FirebaseFirestore
     private lateinit var passengersList: MutableList<PassengerItem>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,8 +54,9 @@ class DisplayPassengersFragment(private val tripID: String) : Fragment(R.layout.
         (activity as MainActivity).createLoadingDialog()
 
         // Fetch all passengers in trip from db
+        source = if ((activity as MainActivity).isOnline()) Source.DEFAULT else Source.CACHE
         db.collection("trips").document(tripID)
-            .collection("passengers").get()
+            .collection("passengers").get(source)
             .addOnSuccessListener { passengers ->
 
                 // If no passengers are found, hide recyclerView and show the no passengers found text

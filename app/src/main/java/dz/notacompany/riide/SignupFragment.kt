@@ -9,6 +9,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -68,7 +69,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
             (activity as MainActivity).createLoadingDialog()
 
-            db.collection("users").whereEqualTo("username",username).get()
+            db.collection("users").whereEqualTo("username",username).get(Source.SERVER)
                 .addOnSuccessListener { documents ->
                     // Check if the username is already taken
                     for (document in documents) { if (document != null) usernameTaken = true }

@@ -12,14 +12,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-
 
 class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_user_info) {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var source: Source
 
     private lateinit var username : TextView
     private lateinit var email : TextView
@@ -137,29 +138,22 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
                             dialog.dismiss()
 
-                            if ((activity as MainActivity).isOnline()) {
+                            (activity as MainActivity).createLoadingDialog()
 
-                                (activity as MainActivity).createLoadingDialog()
+                            db.runBatch { batch ->
+                                batch.set(db.collection("users").document(auth.currentUser!!.uid), newData, SetOptions.merge())
+                            }.addOnCompleteListener {
 
-                                db.collection("users").document(auth.currentUser!!.uid)
-                                    .set(newData, SetOptions.merge())
-                                    .addOnSuccessListener {
-                                        (activity as MainActivity).filledInfo = true
-                                        isEditing = false
-                                        infoTextField.visibility = View.GONE
-                                        infoScrollView.visibility = View.VISIBLE
-                                        infoTv.text = newInfo
-                                        editSaveButton.text = "Edit"
-                                        cancelEditButton.visibility = View.GONE
+                                (activity as MainActivity).filledInfo = true
+                                isEditing = false
+                                infoTextField.visibility = View.GONE
+                                infoScrollView.visibility = View.VISIBLE
+                                infoTv.text = newInfo
+                                editSaveButton.text = "Edit"
+                                cancelEditButton.visibility = View.GONE
 
-                                        (activity as MainActivity).dismissLoadingDialog()
+                                (activity as MainActivity).dismissLoadingDialog()
 
-                                    }
-                            } else {
-
-                                Toast.makeText(context,
-                                    "Cannot connect to the internet, please check your network",
-                                    Toast.LENGTH_SHORT).show()
                             }
                         }
                         .show()
@@ -198,48 +192,66 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
                     dialog.dismiss()
 
-                    if ((activity as MainActivity).isOnline()) {
+                    (activity as MainActivity).createLoadingDialog()
 
-                        (activity as MainActivity).createLoadingDialog()
+                    // Get all ratings
+                    db.collection("users").document(userID).collection("ratings").get(Source.SERVER)
+                        .addOnSuccessListener { ratings ->
 
-                        // Add this new rating
-                        db.collection("users").document(userID)
-                            .collection("ratings").document(auth.currentUser!!.uid)
-                            .set(hashMapOf("rating" to ratingBar.rating))
-                            .addOnSuccessListener {
+                            var newRating = 0f
 
-                                // Get all ratings
-                                db.collection("users").document(userID).collection("ratings").get()
-                                    .addOnSuccessListener { ratings ->
+                            db.runBatch { batch ->
+                                val currentRatingRef = db.collection("users").document(userID).collection("ratings").document(auth.currentUser!!.uid)
 
-                                        // Calculate new average rating
-                                        var newRating = 0f
-                                        for (rating in ratings) {
-                                            newRating += rating.data["rating"].toString().toFloat()
-                                        }
+                                // Add this new rating
+                                batch.set(currentRatingRef, hashMapOf("rating" to ratingBar.rating))
 
-                                        newRating /= ratings.size()
+                                // Calculate new average rating
+                                var userHasAlreadyRated = false
+                                newRating = 0f
 
-                                        // Sets that new average rating
-                                        db.collection("users").document(userID)
-                                            .set(hashMapOf("rating" to newRating), SetOptions.merge())
-                                            .addOnSuccessListener {
-
-                                                ratingTv.text = newRating.toString().plus("/5.0 Stars")
-
-                                                (activity as MainActivity).dismissLoadingDialog()
-                                            }
+                                // Sums all the ratings, if current user has already rated this profile, his rating won't be included in the sum
+                                // Because it will be overwritten
+                                for (rating in ratings) {
+                                    if (rating.id == auth.currentUser!!.uid) {
+                                        userHasAlreadyRated = true
+                                    } else {
+                                        newRating += rating.data["rating"].toString().toFloat()
                                     }
+                                }
 
+                                var someVar = 1
+                                if (userHasAlreadyRated) someVar = 0
+                                newRating += ratingBar.rating
+                                newRating /= (ratings.size() + someVar)
+
+                                // Sets that new average rating
+                                batch.set(db.collection("users").document(userID), hashMapOf("rating" to newRating), SetOptions.merge())
+
+                            }.addOnCompleteListener {
+                                ratingTv.text = newRating.toString().plus("/5.0 Stars")
+
+                                (activity as MainActivity).dismissLoadingDialog()
+
+                            }.addOnFailureListener {
+                                (activity as MainActivity).dismissLoadingDialog()
+
+                                Toast.makeText(
+                                    context,
+                                    it.localizedMessage,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
 
-                    } else {
-                        // No internet
+                        }.addOnFailureListener {
+                            (activity as MainActivity).dismissLoadingDialog()
 
-                        Toast.makeText(context,
-                            "Cannot connect to the internet, please check your network",
-                            Toast.LENGTH_SHORT).show()
-                    }
+                            Toast.makeText(
+                                context,
+                                it.localizedMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                 }
                 .show()
 
@@ -248,7 +260,8 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         (activity as MainActivity).createLoadingDialog()
 
         // Fetching all user data and setting them in the fields
-        db.collection("users").document(userID).get()
+        source = if ((activity as MainActivity).isOnline()) Source.DEFAULT else Source.CACHE
+        db.collection("users").document(userID).get(source)
             .addOnSuccessListener { user ->
                 val localUsername = user.data!!["username"].toString()
                 val filledInfo = user.data!!["filledInfo"].toString().toBoolean()
@@ -272,8 +285,9 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                     (activity as MainActivity).dismissLoadingDialog()
 
                 } else {
+                    val thisRating = user.data!!["rating"].toString().toFloat()
 
-                    ratingTv.text = user.data!!["rating"].toString().plus("/5.0 Stars")
+                    ratingTv.text = "%.1f".format(thisRating).plus("/5.0 Stars")
 
                     if (isCurrentUserProfile) {
                         // 2: User has been rated and this is his profile
@@ -289,7 +303,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                         // If current user hasn't rated the profile's owner, rating bar will be left empty
 
                         db.collection("users").document(userID)
-                            .collection("ratings").document(auth.currentUser!!.uid).get()
+                            .collection("ratings").document(auth.currentUser!!.uid).get(source)
                             .addOnSuccessListener { rating ->
 
                                 if (rating.exists()) {
@@ -301,6 +315,16 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
                     }
                 }
+            }.addOnFailureListener {
+                (activity as MainActivity).dismissLoadingDialog()
+
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Error")
+                    .setMessage("An error occured while accessing the server, please verify your internet connexion then retry")
+                    .setCancelable(false)
+                    .setPositiveButton("Go Back") { dialog, _ ->
+                        parentFragmentManager.popBackStack()
+                    }
             }
     }
 }

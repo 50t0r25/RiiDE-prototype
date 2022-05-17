@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragment_display_trips) {
+
+    private lateinit var source: Source
 
     private lateinit var tripsRv : RecyclerView
     private lateinit var noTripsFoundTv : TextView
@@ -75,10 +78,11 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
                 // Then adds results that match destination but not departure
                 // Finally adds up results that match departure but no destination
                 // NOTE: This requires indexing in the database, if requests ever start failing, look into that
+                source = if ((activity as MainActivity).isOnline()) Source.DEFAULT else Source.CACHE
                 db.collection("trips")
                     .whereEqualTo("departure", departure)
                     .whereEqualTo("destination", destination)
-                    .get()
+                    .get(source)
                     .addOnSuccessListener { trips ->
 
                         for (trip in trips) {
@@ -88,7 +92,7 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
                         db.collection("trips")
                             .whereNotEqualTo("departure", departure)
                             .whereEqualTo("destination", destination)
-                            .get()
+                            .get(source)
                             .addOnSuccessListener { trips1 ->
 
                                 for (trip in trips1) {
@@ -98,7 +102,7 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
                                 db.collection("trips")
                                     .whereEqualTo("departure", departure)
                                     .whereNotEqualTo("destination", destination)
-                                    .get()
+                                    .get(source)
                                     .addOnSuccessListener { trips2 ->
 
                                         for (trip in trips2) {
@@ -131,7 +135,8 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
             // Fetch all trips from db
             1 -> {
 
-                db.collection("trips").get()
+                source = if ((activity as MainActivity).isOnline()) Source.DEFAULT else Source.CACHE
+                db.collection("trips").get(source)
                     .addOnSuccessListener { trips ->
 
                         // If no trips are found, hide recyclerView and show the no trips available text
