@@ -164,35 +164,62 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                             "currentTripID" to tripID
                         )
 
-                        db.runBatch { batch ->
+                        var tripAvailable = false
+
+                        db.runTransaction { transaction ->
 
                             val userRef = db.collection("users").document(auth.currentUser!!.uid)
                             val tripRef = db.collection("trips").document(tripID)
                             val newPassengerRef = db.collection("trips").document(tripID).collection("passengers").document(auth.currentUser!!.uid)
 
-                            // Add the new data to user document
-                            batch.set(userRef, newUserData, SetOptions.merge())
+                            // Recheck if the trip does indeed have seats left
+                            val snapshot = transaction.get(tripRef)
+                            val currentSeatsLeft = snapshot.data?.get("seatsLeft").toString().toInt()
 
-                            // Update the number of seats left in the trip document
-                            batch.update(tripRef, "seatsLeft", seatsLeft - 1)
+                            if (currentSeatsLeft > 0) { // Trip does have seats left
 
-                            // Add the user as a passenger in the "passengers" collection inside the trip document
-                            batch.set(newPassengerRef, hashMapOf("username" to (activity as MainActivity).username))
+                                tripAvailable = true
+
+                                // Add the new data to user document
+                                transaction.set(userRef, newUserData, SetOptions.merge())
+
+                                // Update the number of seats left in the trip document
+                                transaction.update(tripRef, "seatsLeft", currentSeatsLeft - 1)
+
+                                // Add the user as a passenger in the "passengers" collection inside the trip document
+                                transaction.set(newPassengerRef, hashMapOf("username" to (activity as MainActivity).username))
+
+                            }
 
                         }.addOnCompleteListener {
 
-                            // Cache the new variables
-                            (activity as MainActivity).isInTrip = true
-                            (activity as MainActivity).currentTripID = tripID
+                            if (tripAvailable) { // User joined the trip
 
-                            (activity as MainActivity).dismissLoadingDialog()
+                                // Cache the new variables
+                                (activity as MainActivity).isInTrip = true
+                                (activity as MainActivity).currentTripID = tripID
 
-                            Toast.makeText(context,
-                                "Trip joined successfully",
-                                Toast.LENGTH_SHORT).show()
+                                (activity as MainActivity).dismissLoadingDialog()
 
-                            (activity as MainActivity).navBar.selectedItemId =
-                                R.id.page_profile
+                                Toast.makeText(context,
+                                    "Trip joined successfully",
+                                    Toast.LENGTH_SHORT).show()
+
+                                (activity as MainActivity).navBar.selectedItemId =
+                                    R.id.page_profile
+
+                            } else { // User couldn't join the trip
+
+                                (activity as MainActivity).dismissLoadingDialog()
+
+                                Toast.makeText(context,
+                                    "The trip wasn't free anymore",
+                                    Toast.LENGTH_SHORT).show()
+
+                                (activity as MainActivity).navBar.selectedItemId =
+                                    R.id.page_profile
+
+                            }
 
                         }.addOnFailureListener {
                             (activity as MainActivity).dismissLoadingDialog()
