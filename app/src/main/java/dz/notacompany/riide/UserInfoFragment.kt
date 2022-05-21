@@ -229,7 +229,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                                 batch.set(db.collection("users").document(userID), hashMapOf("rating" to newRating), SetOptions.merge())
 
                             }.addOnCompleteListener {
-                                ratingTv.text = newRating.toString().plus("/5.0 Stars")
+                                ratingTv.text = "%.1f".format(newRating).plus("/5.0 Stars")
 
                                 (activity as MainActivity).dismissLoadingDialog()
 
