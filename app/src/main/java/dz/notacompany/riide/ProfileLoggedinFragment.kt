@@ -20,6 +20,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var source: Source
 
     private lateinit var logoutButton : Button
     private lateinit var tripDetailsButton : Button
@@ -64,10 +65,12 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
 
         // Display the trip user state from the cached variable
         if ((activity as MainActivity).isInTrip) {
+            isInTripTv.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START
             isInTripTv.text = "Current trip details:"
             tripDetailsButton.visibility = View.VISIBLE
         } else {
-            isInTripTv.text = "You currently aren't in a trip"
+            isInTripTv.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
+            isInTripTv.text = "You currently aren't in a trip,\nJoin or create one!"
             tripDetailsButton.visibility = View.GONE
         }
 
@@ -84,7 +87,8 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
 
         // Check the trip user state from the database
         // then add a button listener if user is in a trip
-        db.collection("users").document(auth.currentUser!!.uid).get(Source.CACHE)
+        source = if ((activity as MainActivity).isOnline()) Source.DEFAULT else Source.CACHE
+        db.collection("users").document(auth.currentUser!!.uid).get(source)
             .addOnSuccessListener { user ->
                 if (user.data?.get("isInTrip").toString().toBoolean()) {
                     // User is in a trip
