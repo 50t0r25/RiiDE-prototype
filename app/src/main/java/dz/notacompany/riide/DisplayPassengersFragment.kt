@@ -41,7 +41,7 @@ class DisplayPassengersFragment(private val tripID: String) : Fragment(R.layout.
                 (activity as MainActivity).replaceCurrentFragment(UserInfoFragment(passengersList[position].ID))
             } else {
                 Toast.makeText(
-                    context, "Please Login or create an account first",
+                    context, getString(R.string.not_logged_in_error),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -77,7 +77,7 @@ class DisplayPassengersFragment(private val tripID: String) : Fragment(R.layout.
                         if ((activity as MainActivity).isLoggedIn) {
 
                             if (username == (activity as MainActivity).username)
-                                username = username.plus(" (You)")
+                                username = username.plus(getString(R.string.you))
                         }
 
                         passengersList.add(PassengerItem(passenger.id, username))

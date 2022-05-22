@@ -137,7 +137,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                         // Contact info missing
 
                         Toast.makeText(context,
-                            "You need to fill in your contact info in your profile first",
+                            getString(R.string.fill_contact_info),
                             Toast.LENGTH_SHORT).show()
 
                     } else {
@@ -164,7 +164,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
 
                             Toast.makeText(
                                 context,
-                                "Trip created successfully",
+                                getString(R.string.trip_created),
                                 Toast.LENGTH_SHORT
                             ).show()
 
@@ -182,7 +182,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                 } else {
                     // Price input field empty
                     Toast.makeText(context,
-                        "Please give a price per passenger",
+                        getString(R.string.give_price),
                         Toast.LENGTH_SHORT).show()
                 }
             } else {
@@ -190,7 +190,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
                 parentFragmentManager.popBackStack()
 
                 Toast.makeText(context,
-                    "You cannot be in several trips at the same time",
+                    getString(R.string.cannot_be_in_several_trips),
                     Toast.LENGTH_SHORT).show()
             }
         }
@@ -235,7 +235,7 @@ class CreateTripFragment : Fragment(R.layout.fragment_adding_trip), DatePickerDi
         // Checks if the date isn't in the past
         if ((savedYear < year) || (savedDay < day && savedMonth == month+1 && savedYear == year) || (savedMonth < month+1 && savedYear == year) || (savedHour < hour && savedDay == day && savedMonth == month+1 && savedYear == year) || (savedMinute < minute && savedHour == hour && savedDay == day && savedMonth == month+1 && savedYear == year)) {
             Toast.makeText(context,
-                "Time travel is still not a thing",
+                getString(R.string.wrong_time_chosen),
                 Toast.LENGTH_SHORT).show()
         } else {
             (activity as MainActivity).displayTimeInTv(dateTimeTv,savedHour,savedMinute,savedDay,savedMonth,savedYear)

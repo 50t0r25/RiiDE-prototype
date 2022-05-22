@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -28,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
-                android:text="Create an account:"
+                android:text="@string/create_account"
                 android:textSize="30sp"
                 app:layout_constraintBottom_toTopOf="@+id/signupEmailTf"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +41,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Confirm Password"
+                android:hint="@string/confirm_password"
                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout2"
                 app:layout_constraintTop_toBottomOf="@+id/signupPasswordTf"
                 app:passwordToggleEnabled="true">
@@ -68,8 +67,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/cairo_bold"
-                    android:text="Cancel"
-                    android:textColor="@color/white"
+                    android:text="@string/cancel"
+                    android:textColor="@color/text_color01"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -82,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/main_button_color"
                     android:fontFamily="@font/cairo_bold"
-                    android:text="Confirm"
+                    android:text="@string/confirm"
                     android:textColor="@color/text_color01"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +93,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="@string/password"
                 app:layout_constraintBottom_toTopOf="@+id/signupPasswordConfirmTf"
                 app:layout_constraintTop_toBottomOf="@+id/signupUsernameTf"
                 app:passwordToggleEnabled="true">
@@ -112,7 +111,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:hint="@string/email"
                 app:layout_constraintBottom_toTopOf="@+id/signupUsernameTf"
                 app:layout_constraintTop_toBottomOf="@+id/textView2">
 
@@ -127,7 +126,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
+                android:hint="@string/username"
                 app:layout_constraintBottom_toTopOf="@+id/signupPasswordTf"
                 app:layout_constraintTop_toBottomOf="@+id/signupEmailTf">
 

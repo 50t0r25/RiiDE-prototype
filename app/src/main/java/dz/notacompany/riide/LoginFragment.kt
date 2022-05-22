@@ -71,7 +71,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                                 // Sign in success, update UI with the signed-in user's information
                                 Toast.makeText(context,
-                                    "Logged in successfully",
+                                    getString(R.string.logged_in_success),
                                     Toast.LENGTH_SHORT).show()
 
                                 (activity as MainActivity).userEmail = emailToSave
@@ -131,7 +131,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
         } else {
             Toast.makeText(
-                context, "Please refill the fields correctly",
+                context, getString(R.string.refill_fields),
                 Toast.LENGTH_SHORT
             ).show()
         }

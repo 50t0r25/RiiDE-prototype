@@ -61,16 +61,16 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
         }
         // ---------------------------------------------------------
 
-        welcomeTv.text = "Welcome to RiiDE,\n${(activity as MainActivity).username} !"
+        welcomeTv.text = "${getString(R.string.welcome)}${(activity as MainActivity).username} !"
 
         // Display the trip user state from the cached variable
         if ((activity as MainActivity).isInTrip) {
             isInTripTv.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START
-            isInTripTv.text = "Current trip details:"
+            isInTripTv.text = getString(R.string.current_trip_details)
             tripDetailsButton.visibility = View.VISIBLE
         } else {
             isInTripTv.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-            isInTripTv.text = "You currently aren't in a trip,\nJoin or create one!"
+            isInTripTv.text = getString(R.string.no_trip_join)
             tripDetailsButton.visibility = View.GONE
         }
 
@@ -94,7 +94,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
                     // User is in a trip
                     (activity as MainActivity).isInTrip = true
                     isInTripTv.textAlignment = TextView.TEXT_ALIGNMENT_TEXT_START
-                    isInTripTv.text = "Current trip details:"
+                    isInTripTv.text = getString(R.string.current_trip_details)
                     tripDetailsButton.visibility = View.VISIBLE
 
                     tripDetailsButton.setOnClickListener {
@@ -104,7 +104,7 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
                     // User isn't currently in a trip
                     (activity as MainActivity).isInTrip = false
                     isInTripTv.textAlignment = TextView.TEXT_ALIGNMENT_CENTER
-                    isInTripTv.text = "You currently aren't in a trip,\nJoin or create one!"
+                    isInTripTv.text = getString(R.string.no_trip_join)
                     tripDetailsButton.visibility = View.GONE
                 }
 
@@ -126,9 +126,9 @@ class ProfileLoggedinFragment : Fragment(R.layout.fragment_profile_loggedin) {
         helpButton.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("What is RiiDE?")
-                .setMessage("RiiDE is an algerian local carpooling app, it provides you the ability to create and share, or join trips.\nTo start using it, first fill in the \"contact info\" field in your profile, now you can either search for a trip, join it then contact the driver via the info on their profile, or make your own trip and wait for people to join it.\nNote: You can only be in one trip at a time.\n\nThis app was made as an end of cycle project for our bachelor's CS degree.\n\nGithub: @50t0r25 @windyznuts")
-                .setPositiveButton("Close", null)
+                .setTitle(getString(R.string.what_is_ride))
+                .setMessage(getString(R.string.app_description))
+                .setPositiveButton(getString(R.string.close), null)
                 .show()
         }
     }

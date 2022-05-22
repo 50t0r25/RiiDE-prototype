@@ -30,10 +30,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // Checks for the passenger/driver toggle state
         passengerDriverToggle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                searchCreateButton.text = "Create"
+                searchCreateButton.text = getString(R.string.create)
                 isPassenger = false
             } else {
-                searchCreateButton.text = "Search"
+                searchCreateButton.text = getString(R.string.search)
                 isPassenger = true
             }
         }
@@ -52,7 +52,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 // Empty field
 
                 Toast.makeText(
-                    context, "Please refill the fields correctly",
+                    context, getString(R.string.refill_fields),
                     Toast.LENGTH_SHORT
                 ).show()
 
@@ -81,7 +81,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                         // User not logged in
                         Toast.makeText(
-                            context, "Please Login or create an account first",
+                            context, getString(R.string.not_logged_in_error),
                             Toast.LENGTH_SHORT
                         ).show()
                     }

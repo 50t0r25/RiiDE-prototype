@@ -72,7 +72,7 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
                 val departure = (activity as MainActivity).departure
                 val destination = (activity as MainActivity).destination
 
-                titleTv.text = "Results for $departure to $destination:"
+                titleTv.text = "${getString(R.string.results_for)} $departure ${getString(R.string.to)} $destination:"
 
                 // Will do a compound query to first get results for exact departure and destination matches
                 // Then adds results that match destination but not departure
@@ -173,9 +173,9 @@ class DisplayTripsFragment(private val whatToRun: Int) : Fragment(R.layout.fragm
         val date = trip.data["date"] as HashMap<*, *>
 
         val tripID = trip.id
-        val fromTo = "From ${trip.data["departure"]} to ${trip.data["destination"]}"
+        val fromTo = "${getString(R.string.from)} ${trip.data["departure"]} ${getString(R.string.to)} ${trip.data["destination"]}"
         val price = "${trip.data["price"]} DZD"
-        val seats = "${(trip.data["maxPassengers"].toString().toInt() - trip.data["seatsLeft"].toString().toInt())}/${trip.data["maxPassengers"]} Seats"
+        val seats = "${(trip.data["maxPassengers"].toString().toInt() - trip.data["seatsLeft"].toString().toInt())}/${trip.data["maxPassengers"]} ${getString(R.string.seats)}"
         val tripDate = (activity as MainActivity).formatDate(date["day"].toString().toInt(),date["month"].toString().toInt(),date["year"].toString().toInt())
 
         tripsList.add(TripItem(tripID,fromTo,price,seats,tripDate))

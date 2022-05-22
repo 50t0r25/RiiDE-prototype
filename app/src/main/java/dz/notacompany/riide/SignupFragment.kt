@@ -71,9 +71,12 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
             db.collection("users").whereEqualTo("username",username).get(Source.SERVER)
                 .addOnSuccessListener { documents ->
+
                     // Check if the username is already taken
                     for (document in documents) { if (document != null) usernameTaken = true }
+
                     if (!usernameTaken) {
+
                         // Authenticate the user
                         auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(requireActivity()) { task ->
@@ -85,7 +88,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
 
                                     Toast.makeText(
                                         context,
-                                        "Account successfully created",
+                                        getString(R.string.account_created),
                                         Toast.LENGTH_SHORT
                                     ).show()
 
@@ -101,7 +104,9 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                                         R.id.page_profile
 
                                     (activity as MainActivity).dismissLoadingDialog()
+
                                 } else {
+
                                     // If sign in fails, display a message to the user.
                                     (activity as MainActivity).dismissLoadingDialog()
                                     Toast.makeText(
@@ -113,17 +118,20 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                             }
 
                     } else {
+
                         // If the username is already taken, cancel
                         (activity as MainActivity).dismissLoadingDialog()
+
                         Toast.makeText(
                             context,
-                            "Username already taken",
+                            getString(R.string.username_taken),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
 
                 }
                 .addOnFailureListener {
+
                     // Error while checking if the username already exists
                     (activity as MainActivity).dismissLoadingDialog()
                     Toast.makeText(
@@ -133,16 +141,20 @@ class SignupFragment : Fragment(R.layout.fragment_signup) {
                     ).show()
                 }
         } else {
+
             if (!checkStringSafety(username)) {
+
                 // Username isn't safe
                 Toast.makeText(
-                    context, "Username cannot contain '@' and must be 15 characters or less",
+                    context, getString(R.string.username_unsafe),
                     Toast.LENGTH_SHORT
                 ).show()
+
             } else {
+
                 // Input not filled in correctly
                 Toast.makeText(
-                    context, "Please refill the fields correctly",
+                    context, getString(R.string.refill_fields),
                     Toast.LENGTH_SHORT
                 ).show()
             }

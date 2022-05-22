@@ -80,10 +80,11 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
 
                 // Will add " (Full)" next to the number of taken seats if the trip is full
                 var seatsFull = ""
-                if (seatsLeft == 0) seatsFull = " (Full)"
+                if (seatsLeft == 0) seatsFull = getString(R.string.full)
 
                 // Check if the user is logged in
                 if ((activity as MainActivity).isLoggedIn) {
+
                     // if user is the driver, show the delete button
                     if (driver["userID"]?.equals(auth.currentUser!!.uid)!!) {
 
@@ -115,7 +116,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                 // If the user is the driver, adds "(You)" next to their username
                 var newDriverUsername = ""
                 if (isDriver) {
-                    newDriverUsername = driver["username"].toString().plus(" (You)")
+                    newDriverUsername = driver["username"].toString().plus(getString(R.string.you))
                 } else {
                     newDriverUsername = driver["username"].toString()
                 }
@@ -131,7 +132,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                         (activity as MainActivity).replaceCurrentFragment(UserInfoFragment(driver["userID"].toString()))
                     } else {
                         Toast.makeText(
-                            context, "Please Login or create an account first",
+                            context, getString(R.string.not_logged_in_error),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -150,7 +151,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                         // Contact info missing
 
                         Toast.makeText(context,
-                            "You need to fill in your contact info in your profile first",
+                            getString(R.string.fill_contact_info),
                             Toast.LENGTH_SHORT).show()
 
                     } else {
@@ -202,7 +203,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                                 (activity as MainActivity).dismissLoadingDialog()
 
                                 Toast.makeText(context,
-                                    "Trip joined successfully",
+                                    getString(R.string.trip_joined),
                                     Toast.LENGTH_SHORT).show()
 
                                 (activity as MainActivity).navBar.selectedItemId =
@@ -213,7 +214,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                                 (activity as MainActivity).dismissLoadingDialog()
 
                                 Toast.makeText(context,
-                                    "The trip wasn't free anymore",
+                                    getString(R.string.trip_recheck_error),
                                     Toast.LENGTH_SHORT).show()
 
                                 (activity as MainActivity).navBar.selectedItemId =
@@ -261,7 +262,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                         (activity as MainActivity).dismissLoadingDialog()
 
                         Toast.makeText(context,
-                            "Trip left successfully",
+                            getString(R.string.trip_left),
                             Toast.LENGTH_SHORT).show()
 
                         parentFragmentManager.popBackStack()
@@ -282,14 +283,14 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
 
                     // Display the warning
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Warning")
-                        .setMessage("Are you sure you want to delete this trip?\nthis will also kick all the passengers.")
-                        .setNeutralButton("Cancel") { dialog, _ ->
+                        .setTitle(getString(R.string.warning))
+                        .setMessage(getString(R.string.trip_delete_warning))
+                        .setNeutralButton(getString(R.string.cancel)) { dialog, _ ->
                             // User clicks cancel
 
                             dialog.dismiss()
                         }
-                        .setPositiveButton("Delete") { dialog, _ ->
+                        .setPositiveButton(getString(R.string.delete)) { dialog, _ ->
                             // User clicks delete
 
                             dialog.dismiss()
@@ -325,7 +326,7 @@ class TripDetailsFragment(private val tripID: String) : Fragment(R.layout.fragme
                                         (activity as MainActivity).dismissLoadingDialog()
 
                                         Toast.makeText(context,
-                                            "Trip deleted successfully",
+                                            getString(R.string.trip_deleted),
                                             Toast.LENGTH_SHORT).show()
 
                                         parentFragmentManager.popBackStack()

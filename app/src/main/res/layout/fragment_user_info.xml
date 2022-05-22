@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
-                android:text="User Info:"
+                android:text="@string/user_info"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
-                android:text="Back"
+                android:text="@string/back"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/main_button_color"
                 android:fontFamily="@font/cairo_bold"
-                android:text="Submit rating"
+                android:text="@string/submit_rating"
                 android:textColor="@color/text_color01"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -106,7 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.5"
                         android:fontFamily="@font/cairo_bold"
-                        android:text="Current user rating:"
+                        android:text="@string/current_rating"
                         android:textSize="17sp" />
 
                     <TextView
@@ -115,7 +115,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="@font/cairo_medium"
-                        android:text="Not rated yet"
+                        android:text="@string/not_rated"
                         android:textSize="17sp" />
                 </LinearLayout>
 
@@ -123,7 +123,7 @@
                     android:id="@+id/userInfoRatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="User rating bar"
+                    android:contentDescription="@string/rating_bar"
                     android:numStars="5"
                     android:rating="0" />
 
@@ -177,7 +177,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/cairo_medium"
-                                android:text="No user info provided."
+                                android:text="@string/no_info_provided"
                                 android:textIsSelectable="true"
                                 android:textColor="@color/secondary_text"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -226,7 +226,7 @@
                             android:layout_height="wrap_content"
                             android:backgroundTint="@color/main_button_color"
                             android:fontFamily="@font/cairo_bold"
-                            android:text="Edit"
+                            android:text="@string/edit"
                             android:textColor="@color/text_color01"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent" />
@@ -237,7 +237,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/cairo_bold"
-                            android:text="Cancel"
+                            android:text="@string/cancel"
                             android:textColor="@color/white"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"

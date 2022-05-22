@@ -106,7 +106,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
 
                 // If user hasn't filled his info, it won't pass the predefined text to the text field
                 if ((activity as MainActivity).filledInfo) infoEditText.setText(infoTv.text)
-                editSaveButton.text = "Save"
+                editSaveButton.text = getString(R.string.save)
                 cancelEditButton.visibility = View.VISIBLE
 
             } else {
@@ -115,7 +115,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                 if (newInfo.length < 10) {
 
                     Toast.makeText(context,
-                        "Please fill the field correctly",
+                        getString(R.string.refill_fields),
                         Toast.LENGTH_SHORT).show()
 
                 } else {
@@ -127,14 +127,14 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                     )
 
                     MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("Caution")
-                        .setMessage("Your contact info has to be accessible by other users, filling it with anything else will get you banned.")
-                        .setNeutralButton("Cancel") { dialog, _ ->
+                        .setTitle(getString(R.string.caution))
+                        .setMessage(getString(R.string.edit_info_warning))
+                        .setNeutralButton(getString(R.string.cancel)) { dialog, _ ->
                             // User clicks cancel
 
                             dialog.dismiss()
                         }
-                        .setPositiveButton("Confirm") { dialog, _ ->
+                        .setPositiveButton(getString(R.string.confirm)) { dialog, _ ->
 
                             dialog.dismiss()
 
@@ -149,7 +149,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                                 infoTextField.visibility = View.GONE
                                 infoScrollView.visibility = View.VISIBLE
                                 infoTv.text = newInfo
-                                editSaveButton.text = "Edit"
+                                editSaveButton.text = getString(R.string.edit)
                                 cancelEditButton.visibility = View.GONE
 
                                 (activity as MainActivity).dismissLoadingDialog()
@@ -168,7 +168,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
             isEditing = false
             infoTextField.visibility = View.GONE
             infoScrollView.visibility = View.VISIBLE
-            editSaveButton.text = "Edit"
+            editSaveButton.text = getString(R.string.edit)
             cancelEditButton.visibility = View.GONE
         }
 
@@ -181,14 +181,14 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         submitRatingButton.setOnClickListener {
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Confirm")
-                .setMessage("Are you sure you want to rate this user ${ratingBar.rating}/5.0 stars?")
-                .setNeutralButton("Cancel") { dialog, _ ->
+                .setTitle(getString(R.string.confirm))
+                .setMessage("${getString(R.string.rate_user_warning)} ${ratingBar.rating}/5.0 ${getString(R.string.stars)}?")
+                .setNeutralButton(getString(R.string.cancel)) { dialog, _ ->
                     // User clicks cancel
 
                     dialog.dismiss()
                 }
-                .setPositiveButton("Rate") { dialog, _ ->
+                .setPositiveButton(getString(R.string.rate)) { dialog, _ ->
 
                     dialog.dismiss()
 
@@ -229,7 +229,7 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
                                 batch.set(db.collection("users").document(userID), hashMapOf("rating" to newRating), SetOptions.merge())
 
                             }.addOnCompleteListener {
-                                ratingTv.text = "%.1f".format(newRating).plus("/5.0 Stars")
+                                ratingTv.text = "%.1f".format(newRating).plus("/5.0 ${getString(R.string.stars)}")
 
                                 (activity as MainActivity).dismissLoadingDialog()
 
@@ -263,68 +263,89 @@ class UserInfoFragment(private val userID: String) : Fragment(R.layout.fragment_
         source = if ((activity as MainActivity).isOnline()) Source.DEFAULT else Source.CACHE
         db.collection("users").document(userID).get(source)
             .addOnSuccessListener { user ->
-                val localUsername = user.data!!["username"].toString()
-                val filledInfo = user.data!!["filledInfo"].toString().toBoolean()
-                username.text = "Username: ".plus(localUsername)
-                email.text = user.data!!["email"].toString()
-                infoTitle.text = localUsername.plus("'s contact info:")
 
-                // If user has filled his info, display it, else display predefined text
-                if (filledInfo) {
-                    infoTv.text = user.data!!["info"].toString()
+                if (!user.exists()) {
+                    showNoUserError()
                 } else {
-                    infoTv.text = "No user info provided yet."
-                }
 
-                // Setting the rating has 3 different possibilities
-                if (user.data!!["rating"] == null) {
-                    // 1: No rating, leave rating bar empty and display this text
+                    val localUsername = user.data!!["username"].toString()
+                    val filledInfo = user.data!!["filledInfo"].toString().toBoolean()
+                    username.text = "${getString(R.string.username)}: ".plus(localUsername)
+                    email.text = user.data!!["email"].toString()
+                    infoTitle.text = localUsername.plus(getString(R.string.contact_info))
 
-                    ratingTv.text = "Not rated yet"
+                    // If user has filled his info, display it, else display predefined text
+                    if (filledInfo) {
+                        infoTv.text = user.data!!["info"].toString()
+                    } else {
+                        infoTv.text = getString(R.string.no_user_info)
+                    }
 
-                    (activity as MainActivity).dismissLoadingDialog()
+                    // Setting the rating has 3 different possibilities
+                    if (user.data!!["rating"] == null) {
+                        // 1: No rating, leave rating bar empty and display this text
 
-                } else {
-                    val thisRating = user.data!!["rating"].toString().toFloat()
-
-                    ratingTv.text = "%.1f".format(thisRating).plus("/5.0 Stars")
-
-                    if (isCurrentUserProfile) {
-                        // 2: User has been rated and this is his profile
-                        // The rating bar will display the average rating & the user can't change it
-
-                        ratingBar.rating = user.data!!["rating"].toString().toFloat()
+                        ratingTv.text = getString(R.string.not_rated)
 
                         (activity as MainActivity).dismissLoadingDialog()
 
                     } else {
-                        // 3: User has been rated and this isn't his profile
-                        // Get this current user's rating of the profile's owner and display it in the rating bar, user can modify it and submit a new rating
-                        // If current user hasn't rated the profile's owner, rating bar will be left empty
+                        val thisRating = user.data!!["rating"].toString().toFloat()
 
-                        db.collection("users").document(userID)
-                            .collection("ratings").document(auth.currentUser!!.uid).get(source)
-                            .addOnSuccessListener { rating ->
+                        ratingTv.text = "%.1f".format(thisRating).plus("/5.0 ${getString(R.string.stars)}")
 
-                                if (rating.exists()) {
-                                    ratingBar.rating = rating.data!!["rating"]?.toString()!!.toFloat()
+                        if (isCurrentUserProfile) {
+                            // 2: User has been rated and this is his profile
+                            // The rating bar will display the average rating & the user can't change it
+
+                            ratingBar.rating = user.data!!["rating"].toString().toFloat()
+
+                            (activity as MainActivity).dismissLoadingDialog()
+
+                        } else {
+                            // 3: User has been rated and this isn't his profile
+                            // Get this current user's rating of the profile's owner and display it in the rating bar, user can modify it and submit a new rating
+                            // If current user hasn't rated the profile's owner, rating bar will be left empty
+
+                            db.collection("users").document(userID)
+                                .collection("ratings").document(auth.currentUser!!.uid).get(source)
+                                .addOnSuccessListener { rating ->
+
+                                    if (rating.exists()) {
+                                        ratingBar.rating = rating.data!!["rating"]?.toString()!!.toFloat()
+                                    }
+
+                                    (activity as MainActivity).dismissLoadingDialog()
+
+                                }.addOnFailureListener {
+                                    (activity as MainActivity).dismissLoadingDialog()
+
+                                    Toast.makeText(
+                                        context,
+                                        it.localizedMessage,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
 
-                                (activity as MainActivity).dismissLoadingDialog()
-                            }
-
+                        }
                     }
                 }
             }.addOnFailureListener {
-                (activity as MainActivity).dismissLoadingDialog()
-
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Error")
-                    .setMessage("An error occured while accessing the server, please verify your internet connexion then retry")
-                    .setCancelable(false)
-                    .setPositiveButton("Go Back") { dialog, _ ->
-                        parentFragmentManager.popBackStack()
-                    }
+                showNoUserError()
             }
     }
+
+    private fun showNoUserError() {
+        (activity as MainActivity).dismissLoadingDialog()
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.error))
+            .setMessage(getString(R.string.check_net_error))
+            .setCancelable(false)
+            .setPositiveButton(getString(R.string.go_back)) { dialog, _ ->
+                parentFragmentManager.popBackStack()
+            }.show()
+
+    }
+
 }

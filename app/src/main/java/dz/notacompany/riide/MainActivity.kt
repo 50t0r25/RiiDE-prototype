@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
 
     // Displays time and date in a TextView
     fun displayTimeInTv(tv : TextView, fHour : Int, fMinute : Int, fDay : Int, fMonth : Int, fYear : Int) {
-        tv.text = "Time: ${intDoubleDigit(fHour)}:${intDoubleDigit(fMinute)}\nDate: ${intDoubleDigit(fDay)}/${intDoubleDigit(fMonth)}/$fYear"
+        tv.text = "${getString(R.string.time)} ${intDoubleDigit(fHour)}:${intDoubleDigit(fMinute)}\n${getString(R.string.date)}: ${intDoubleDigit(fDay)}/${intDoubleDigit(fMonth)}/$fYear"
     }
 
     // Formats Date (dd/mm/yyyy) to a string

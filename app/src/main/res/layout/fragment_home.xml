@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp">
@@ -34,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:hint="Departure">
+                    android:hint="@string/departure">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/departureEt"
@@ -47,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:hint="Destination">
+                    android:hint="@string/destination">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/destinationEt"
@@ -64,11 +63,11 @@
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/squareish_button_background"
                         android:fontFamily="@font/cairo_bold"
-                        android:text="Search"
+                        android:text="@string/search"
                         android:textColor="@color/text_color01" />
 
                     <ToggleButton
@@ -79,8 +78,8 @@
                         android:background="@drawable/squareish_button_background"
                         android:fontFamily="@font/cairo_bold"
                         android:textColor="@color/text_color01"
-                        android:textOff="Passenger"
-                        android:textOn="Driver" />
+                        android:textOff="@string/passenger"
+                        android:textOn="@string/driver" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -93,7 +92,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/squareish_button_background"
                 android:fontFamily="@font/cairo_bold"
-                android:text="Show all available trips"
+                android:text="@string/show_trips"
                 android:textColor="@color/text_color01"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
