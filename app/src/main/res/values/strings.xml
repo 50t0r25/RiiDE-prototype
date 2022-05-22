@@ -5,7 +5,8 @@
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="from">From:</string>
-    <string name="to">To:</string>
+    <string name="to_dots">To:</string>
+    <string name="to">To</string>
     <string name="departure_time">Departure date and time:</string>
     <string name="choose_time">Choose time</string>
     <string name="price_per_person">Price per person:</string>

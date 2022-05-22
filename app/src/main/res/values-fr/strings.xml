@@ -5,7 +5,8 @@
     <string name="home">Acceuil</string>
     <string name="profile">Profil</string>
     <string name="from">De:</string>
-    <string name="to">À:</string>
+    <string name="to_dots">À:</string>
+    <string name="to">À</string>
     <string name="departure_time">Date et heure de départ:</string>
     <string name="choose_time">Choisissez l\'heure</string>
     <string name="price_per_person">Prix par personne:</string>

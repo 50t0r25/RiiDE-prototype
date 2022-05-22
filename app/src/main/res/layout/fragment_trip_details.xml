@@ -79,7 +79,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/cairo_bold"
-                android:text="@string/to"
+                android:text="@string/to_dots"
                 android:textColor="@color/text_color01"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView3"
