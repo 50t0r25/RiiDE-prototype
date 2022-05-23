@@ -48,7 +48,7 @@
     <string name="email">Email</string>
     <string name="username">Nom d\'utilisateur</string>
     <string name="trip_details">Détails du voyage:</string>
-    <string name="time_date">Heure: \nDate:&#032;</string>
+    <string name="time_date">Heure: \nDate:\u0020</string>
     <string name="seats_taken">Places occupées:</string>
     <string name="view_passengers">Voir les passagers</string>
     <string name="user_info">info de l\'utilisateur:</string>
@@ -56,7 +56,7 @@
     <string name="current_rating">évaluation actuelle:</string>
     <string name="not_rated">Pas encore evalué</string>
     <string name="rating_bar">Barre d\'évaluation</string>
-    <string name="contact_info">Informations de contact</string>
+    <string name="contact_info">: Coordonnées</string>
     <string name="no_info_provided">Aucune information utilisateur fournie.</string>
     <string name="fill_contact_info">Vous devez d\'abord renseigner vos coordonnées dans votre profil</string>
     <string name="trip_created">Voyage créé avec succés</string>
@@ -64,8 +64,8 @@
     <string name="cannot_be_in_several_trips">Vous ne pouvez pas être dans plusieurs voyages en même temps</string>
     <string name="wrong_time_chosen">Vous ne pouvez pas voyager dans le temps</string>
     <string name="not_logged_in_error">Veuillez d\'abord vous connecter ou créer un compte</string>
-    <string name="you">&#032;(vous)</string>
-    <string name="full">&#032;(plein)</string>
+    <string name="you">\u0020(vous)</string>
+    <string name="full">\u0020(plein)</string>
     <string name="results_for">Résultats pour</string>
     <string name="seats">Places</string>
     <string name="create">Créer</string>

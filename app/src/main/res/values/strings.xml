@@ -48,7 +48,7 @@
     <string name="email">Email</string>
     <string name="username">Username</string>
     <string name="trip_details">Trip details:</string>
-    <string name="time_date">Time: \nDate:&#032;</string>
+    <string name="time_date">Time: \nDate:\u0020</string>
     <string name="seats_taken">Teats taken:</string>
     <string name="view_passengers">View Passengers</string>
     <string name="user_info">User Info:</string>
@@ -64,8 +64,8 @@
     <string name="cannot_be_in_several_trips">You cannot be in several trips at the same time</string>
     <string name="wrong_time_chosen">You cannot time travel</string>
     <string name="not_logged_in_error">Please Login or create an account first</string>
-    <string name="you">&#032;(You)</string>
-    <string name="full">&#032;(Full)</string>
+    <string name="you">\u0020(You)</string>
+    <string name="full">\u0020(Full)</string>
     <string name="results_for">Results for</string>
     <string name="seats">Seats</string>
     <string name="create">Create</string>
