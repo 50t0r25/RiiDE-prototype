@@ -49,7 +49,7 @@
     <string name="username">Username</string>
     <string name="trip_details">Trip details:</string>
     <string name="time_date">Time: \nDate:\u0020</string>
-    <string name="seats_taken">Teats taken:</string>
+    <string name="seats_taken">Seats taken:</string>
     <string name="view_passengers">View Passengers</string>
     <string name="user_info">User Info:</string>
     <string name="submit_rating">Submit rating</string>
