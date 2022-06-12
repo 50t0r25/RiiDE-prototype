@@ -16,15 +16,26 @@
             android:layout_height="match_parent"
             android:padding="20dp">
 
+            <ImageView
+                android:id="@+id/searchIconImageV"
+                android:layout_width="45dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/displayTripsTitleTv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/displayTripsTitleTv"
+                app:srcCompat="@drawable/search_icon"
+                app:tint="@color/text_color01" />
+
             <TextView
                 android:id="@+id/displayTripsTitleTv"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:fontFamily="@font/cairo_bold"
                 android:text="@string/click_trip"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/searchIconImageV"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
