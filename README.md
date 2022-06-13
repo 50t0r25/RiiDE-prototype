@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" />
+</p>
+
 # RiiDE
 RiiDE is a carpooling app that lets users search through, join or create trips to any given destination, and also helps managing the pricing, passengers, contact info and timings.
 
