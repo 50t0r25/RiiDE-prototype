@@ -9,7 +9,6 @@ This app was roughly developed in a month from week-end to week-end as an end of
 |---|---|---|
 
 # Features
-### Finished:
 - Auth
 - Trip management
 - Passanger management
@@ -17,8 +16,6 @@ This app was roughly developed in a month from week-end to week-end as an end of
 - Search capabilities & indexing
 - Rating system
 - English & French localization
-### TODO:
-- UI & Design overhaul (Logo, Icon, better color palette..etc)
 
 # Build
 Simply cloning and building with android studio should do the trick, make sure to use the latest androidx libraries.
